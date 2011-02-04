@@ -1,52 +1,38 @@
 #ifndef Trigger_h
 #define Trigger_h
 
-#include "Main.h"
-#include "Entity.h"
-
-
-typedef enum
+#include <allegro5/allegro5.h>
+extern "C"
 {
-	/* Trigger type is uninitialized/undefined */
-	TRIGGER_TYPE_NONE = 0,
+#include "allegro5/a5_ttf.h"
+}
 
-	/* Trigger responds when someone/something moves close to it (like a motion
-	 * sensor, edge of map, etc.)
-	 */
-	TRIGGER_TYPE_PROXIMITY,
 
-	/* Trigger responds when an Entity performs an ACTION on it (like a switch,
-	 * button, etc.)
-	 */
-	TRIGGER_TYPE_INTERACT,
+typedef enum {
+TRIGGER_TYPE_NONE, 
+TRIGGER_TYPE_PROXIMITY,
 
-	/* Number of defined trigger types */
-	NUM_TRIGGER_TYPES
+TRIGGER_TYPE_USER
 } trigger_t;
 
 
 class Trigger
 {
-	public:
-		Trigger();
-		virtual ~Trigger();
-
-		bool CheckCollision(Entity *e);
-
-	private:
-		trigger_t trigger_type;
-//		Action* action;
+private:
+	trigger_t trigger_type;
+	Action * action;
 };
 
-
-class Trigger_proximity :
-public Trigger
+class Trigger_proximity : public Trigger() 
 {
-	private:
-		Item* item1;
-		Item* item2;
-		float distance;
+private:
+	Item * item1;
+	Item * item2;
+	float distance;
 };
 
 
-#endif  //  Trigger_h
+
+
+
+#endif

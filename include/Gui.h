@@ -1,45 +1,59 @@
 #ifndef Gui_h
 #define Gui_h
 
-#include "Main.h"
+#include <allegro5/allegro5.h>
+extern "C"
+{
+#include "allegro5/a5_ttf.h"
+}
+
 #include "Game.h"
 #include "Game_events.h"
 
 class Menu;
 
-
 class Gui
 {
 public:
-	Gui(Game* game);
-	ALLEGRO_FONT* Get_font();
-	void Set_font(ALLEGRO_FONT* font);
+	Gui(Game * game);
+	ALLEGRO_FONT * Get_font();
+	void Set_font(ALLEGRO_FONT * font);
 
-	ALLEGRO_FONT* font;
+	ALLEGRO_FONT * font;
 };
+
 
 
 class Button
 {
 public:
-	Button(Menu* menu);
-	Button(Gui* Gui);
-	Button(Gui* gui, int cx, int cy, int w, int h, char* string, char* tag);
+	Button();
+	Button(Menu * menu);
+	Button(Gui * Gui);
+	Button(Gui * gui, int cx, int cy, int w, int h, char * string, char * tag);
 	~Button();
 	void Draw(int x, int y, bool selected);
-	void Draw_Centre(int x, int y, bool selected);	
+	void Draw_Centre(int x, int y, bool selected);
+	void Render();	
+
+	void SetText(char *);
+	char * GetText();
+	void Shape(int x, int y, int w, int h);
+	void MakeExit();
+	void Set_game_event(game_event_n n);
 
 protected:
 	game_event_n action; 
-
 private:
-	Gui* gui;
-	Menu* menu;
-	int x, y;
-	int width, height;
-	char* string;
-	char* tag;
+	Gui * gui;
+	Menu * menu;
+	int  x, y, width, height;
+	char * string;
+	char * tag;
+	bool selected;
+	bool visible;
+	bool active;   //non-greyed
+	bool animated;
 };
 
-
-#endif  //  Gui_h
+#endif

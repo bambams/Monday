@@ -1,7 +1,6 @@
-#include "Menu.h"
-
-#include "Debug.h"
+//#include "Menu.h"
 #include "Game.h"
+
 #include "Gui.h"
 
 
@@ -12,19 +11,16 @@ Menu::Menu(Game* game)
 {
 }
 
-
 Menu::~Menu()
 {
 	if(child)
 		delete child;
 }
 
-
 void Menu::Open_child(Menu* menu)
 {
 	child = menu;
 }
-
 
 void Menu::Base_event(ALLEGRO_EVENT event)
 {
@@ -41,25 +37,22 @@ void Menu::Base_event(ALLEGRO_EVENT event)
 				if(parent)
 					parent->Close_child();
 				else
-					game->Quit_game(); // AFAICT this is only done if you press esc
-				return;                    // from the main menu, so you should quit.
+					game->Close_menu();
+				return;
 			}
 		}
 		game->Queue_game_event(Event(event));
 	}
 }
 
-
 game_event_n Menu::Event(ALLEGRO_EVENT event)
 {
-   return GAME_EVENT_NONE;
+	return GAME_EVENT_NONE;
 }
-
 
 void Menu::Render()
 {
 }
-
 
 void Menu::Close_child()
 {
@@ -67,11 +60,19 @@ void Menu::Close_child()
 	child = NULL;
 }
 
-
 void Menu::Add_button(Vector position)
 {
 	Button button(this);
 
+}
+
+/* Adds Gui object g to Menu's tree */
+void Menu::Add(Gui * g) {
+	gui_list = (Gui**) realloc ( gui_list, ++gui_num * sizeof(Gui *)); 
+	if (gui_list) {
+		gui_list[gui_num-1] = g;
+	}
+	else gui_num = 0;
 }
 
 
@@ -87,7 +88,7 @@ int Menu_add_button(lua_State* state)
 
 	menu->Add_button(Vector(x, y));
 
-	Monday_out(VERBOSE_LEVEL2, std::cout, "[LUA] Menu_add_button\n");
+	printf("[LUA] Menu_add_button\n");
 
 	return 0;
 }
@@ -98,5 +99,3 @@ void Menu_register_lua_callbacks(lua_State* state)
 	lua_register(state, "Menu_add_button", Menu_add_button);
 //	lua_register(state, "Menu_background_pic", Menu_background_pic);
 }
-
-

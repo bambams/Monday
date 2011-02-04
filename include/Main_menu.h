@@ -2,9 +2,18 @@
 #define Main_menu_h
 
 #include "Menu.h"
+#include "Gui.h"
+
 
 class Main_menu: public Menu
 {
+private:
+
+	Button playButton;
+	Button optionsButton;
+	Button exitButton;
+
+
 public:
 	Main_menu(Game* game);
 	void Render();

@@ -1,14 +1,6 @@
 #include "Player.h"
 
-#include "Debug.h"
-#include "Game.h"
-
-#include <iostream>
-#include <sstream>
-
-
-Player::Player() :
-	Entity(NULL)
+Player::Player()
 {
 	up=false;
 	down=false;
@@ -17,31 +9,14 @@ Player::Player() :
 	height=1;
 }
 
-
-/**
- * Function: Event
- *
- * Handles events that come from the game.
- *
- * Currently, this function supports keyboard events, such as keydowns and
- * keyups that we need to track.
- */
-void Player::Event(ALLEGRO_EVENT event)
+void Player::Initiate()
 {
-	switch (event.type)
-	{
-		case ALLEGRO_EVENT_KEY_DOWN:
-			Keypress(event.keyboard.keycode);
-			break;
+	animation.Load("media/Gryphon_fly_u.adf");
+	animator.Set_animation(&animation);
+}
 
-		case ALLEGRO_EVENT_KEY_UP:
-			Keyrelease(event.keyboard.keycode);
-			break;
-
-		default:
-			break;
-	}
-
+void Player::Update(double dt)
+{
 	Vector vel;
 	if(up)
 		vel+=Vector(0, -1);
@@ -51,122 +26,118 @@ void Player::Event(ALLEGRO_EVENT event)
 		vel+=Vector(-1, 0);
 	if(right)
 		vel+=Vector(1, 0);
-	Set_movement(vel);
+
+	position+=vel*dt*100;
+	animator.Update(dt*2);
 }
 
+void Player::Render()
+{
+	animator.Render(position.X(), position.Y(), height);
+}
+
+void Player::Event(ALLEGRO_EVENT event)
+{
+	if (event.type == ALLEGRO_EVENT_KEY_DOWN)
+	{
+		Keypress(event.keyboard.keycode);
+	}
+	if (event.type == ALLEGRO_EVENT_KEY_UP)
+	{
+		Keyrelease(event.keyboard.keycode);
+	}
+}
 
 void Player::Keypress(int keycode)
 {
-	switch (keycode)
+	if(keycode==ALLEGRO_KEY_UP)
 	{
-		case ALLEGRO_KEY_UP:
-			up = true;
-			break;
-
-		case ALLEGRO_KEY_DOWN:
-			down = true;
-			break;
-
-		case ALLEGRO_KEY_LEFT:
-			left = true;
-			break;
-
-		case ALLEGRO_KEY_RIGHT:
-			right = true;
-			break;
-
-		case ALLEGRO_KEY_A:
-		{
-			Map* map = game->Get_map();
-			mon_assert(NULL != map && "Game returned a NULL map.\n");
-			/* We are looking for a "radius", which I'm just fudging and taking
-			 * the tile width defined in the map.  Though, to be more accurate,
-			 * there should be another determiner (maybe even the average of
-			 * the tile width*height).
-			 */
-			map->Pick_up(position, map->Get_TileWidth(), this, true);
-			break;
-		}
-
-		case ALLEGRO_KEY_Z:
-		{
-			Map* map = game->Get_map();
-			mon_assert(NULL != map && "Game returned a NULL map.\n");
-			/* We are looking for a "radius", which I'm just fudging and taking
-			 * the tile width defined in the map.  Though, to be more accurate,
-			 * there should be another determiner (maybe even the average of
-			 * the tile width*height).
-			 */
-			map->Interact(position, map->Get_TileWidth(), this);
-			Monday_out(SUGGESTION_LEVEL, std::cout, "Collected items: %d\n", this->Get_entities().size());
-			break;
-		}
-
-		default:
-			break;
+		up=true;
 	}
+	if(keycode==ALLEGRO_KEY_DOWN)
+	{
+		down=true;
+	}
+	if(keycode==ALLEGRO_KEY_LEFT)
+	{
+		left=true;
+	}
+	if(keycode==ALLEGRO_KEY_RIGHT)
+	{
+		right=true;
+	}
+/*
+	if(keycode==ALLEGRO_KEY_A)
+	{
+		++height;
+	}
+	if(keycode==ALLEGRO_KEY_Z)
+	{
+		--height;
+	}
+*/
 }
-
 
 void Player::Keyrelease(int keycode)
 {
-	switch (keycode)
+	if(keycode==ALLEGRO_KEY_UP)
 	{
-		case ALLEGRO_KEY_UP:
-			up = false;
-			break;
-
-		case ALLEGRO_KEY_DOWN:
-			down = false;
-			break;
-
-		case ALLEGRO_KEY_LEFT:
-			left = false;
-			break;
-
-		case ALLEGRO_KEY_RIGHT:
-			right = false;
-			break;
-
-		default:
-			break;
+		up=false;
+	}
+	if(keycode==ALLEGRO_KEY_DOWN)
+	{
+		down=false;
+	}
+	if(keycode==ALLEGRO_KEY_LEFT)
+	{
+		left=false;
+	}
+	if(keycode==ALLEGRO_KEY_RIGHT)
+	{
+		right=false;
 	}
 }
 
-
-void Player::Render(const Camera& camera)
+void Player::Set_position(Vector pos)
 {
-	/* Allow Entity's default Render() to be called first */
-	Entity::Render(camera);
-
-	Vector rpos = camera.Apply(Entity::position);
-	float x = Entity::position.X();
-	float y = Entity::position.Y();
-
-	/* If any level of debugging is turned on, show the player's coordinates */
-	if (showDebug > CRITICAL_LEVEL && showDebug < NUM_DEBUG_DEFINITIONS)
-	{
-		ALLEGRO_COLOR green = al_map_rgba_f(0.25, 0.75, 0.25, 1);
-		ALLEGRO_COLOR black = al_map_rgba_f(0.0, 0.0, 0.0, 1);
-		ALLEGRO_FONT* font = game->Get_font();
-		std::stringstream ss;
-		Monday_out(showDebug, ss, "(%d,%d): (%d,%d)..(%d,%d)", int(x), int(y), int(x - size), int(y - size), int(x + size), int(y + size));
-		std::string positionStr = ss.str();
-
-		/* Black, slightly offset lettering to increase visibility */
-		al_set_blender(ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA, black);
-		al_font_textout_centre(font, al_get_display_width() / 2 + 1, 12 + 1, positionStr.c_str(), -1);
-
-		/* Green lettering */
-		al_set_blender(ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA, green);
-		al_font_textout_centre(font, al_get_display_width() / 2, 12, positionStr.c_str(), -1);
-
-		/* Restore the blender to normal */
-		al_set_blender(ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA, al_map_rgba_f(1, 1, 1, 1));
-	}
+	position = pos;
 }
 
+Vector Player::Get_position()
+{
+	return position;
+}
+
+
+/* callback functions for lua */
+int Player_set_position(lua_State* state)
+{
+//	assert(lua_gettop(state) == 2);
+
+	Player* player = static_cast<Player*>(lua_touserdata(state, 1));
+
+	int x = lua_tonumber(state, 2);
+	int y = lua_tonumber(state, 3);
+
+	player->Set_position(Vector(x, y));
+
+	return 0;
+}
+
+int Player_get_position(lua_State* state)
+{
+	Player* player = static_cast<Player*>(lua_touserdata(state, 1));
+
+	Vector position = player->Get_position();
+
+	lua_pushnumber(state, position.X());
+	lua_pushnumber(state, position.Y());
+
+	return 2;
+}
 
 void Player_register_lua_callbacks(lua_State* state)
 {
+	lua_register(state, "Player_set_position", Player_set_position);
+	lua_register(state, "Player_get_position", Player_get_position);
 }

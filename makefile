@@ -20,9 +20,6 @@
 #   DLL dependencies. The static object files are put in obj/static
 #   and the executable has '_static' appended to the name.
 #
-# DEBUG=1
-#   Compiles/removes debugging information.
-#
 # NAME=game_name
 #   Sets the name of the game executable. By default the game
 #   executable is called 'game' or 'game.exe'.
@@ -36,7 +33,7 @@
 CC = gcc
 CXX = g++
 LD = g++
-CFLAGS = -Iinclude -I/usr/include/lua5.1 -s -W -Wall -Wno-unused -g
+CFLAGS = -Iinclude -I/usr/include/lua5.1 -s -W -Wall
 
 # Add-on libraries go here
 ifdef STATICLINK
@@ -46,15 +43,10 @@ else
 endif
 
 ifdef PROFILE
-	CFLAGS += -g3 -pg
-	LFLAGS += -g3 -pg
+	CFLAGS += -g -pg
+	LFLAGS += -g -pg
 else
-	ifdef DEBUG
-		CFLAGS += -g3 -ggdb3 -O0
-		LFLAGS += -g3 -ggdb3 -O0
-	else
-		CFLAGS += -O3
-	endif
+	CFLAGS += -O3
 endif
 
 ifndef NAME
@@ -67,45 +59,28 @@ ifdef MINGDIR
 endif
 endif
 
-LIBS += -la5_iio-4.9.8 -la5_font-4.9.8 -la5_ttf-4.9.8 -llua
-
-
 ifdef WINDOWS
-#	RM = del /q
+	RM = del /q
 	CFLAGS += -D__GTHREAD_HIDE_WIN32API
 	LFLAGS = -Wl,--subsystem,windows
 	ifdef STATICLINK
-
-		ifdef DEBUG
-			LIBS += -lallegd_s-4.9.8
-		else
-			LIBS += -lalleg_s-4.9.8
-		endif
-
 		CFLAGS += -DSTATICLINK
-		LIBS += -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lole32 -ldinput -lddraw -ldxguid -lwinmm -ldsound
+		LIBS += -lalleg_s -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lole32 -ldinput -lddraw -ldxguid -lwinmm -ldsound
 		OBJDIR = obj/static
 		BIN = $(NAME)_static.exe
 	else
-		ifdef DEBUG
-			CFLAGS += -DDEBUG
-			LIBS += -lallegd-4.9.8
-			OBJDIR = obj/debug
-			BIN = $(NAME)_debug.exe
-		else
-			LIBS += -lalleg-4.9.8
-			OBJDIR = obj/release
-			BIN = $(NAME).exe
-		endif
+		LIBS += -lalleg
+		OBJDIR = obj
+		BIN = $(NAME).exe
 	endif
 else
 	RM = rm -f
 	ifdef STATICLINK
-		LIBS += `allegro5-config --libs --static` -lXrender
+		LIBS += `allegro-config --libs --static` -lXrender
 		OBJDIR = obj/static
 		BIN = $(NAME)_static
 	else
-		LIBS += `allegro5-config --libs`
+		LIBS += `allegro5-config --libs` -la5_iio -la5_font -la5_ttf -llua5.1
 		OBJDIR = obj
 		BIN = $(NAME)
 	endif
@@ -114,7 +89,7 @@ endif
 OBJ_CPP := $(addprefix $(OBJDIR)/, $(subst src/,,$(patsubst %.cpp,%.o,$(wildcard src/*.cpp))))
 OBJ_C := $(addprefix $(OBJDIR)/, $(subst src/,,$(patsubst %.c,%.o,$(wildcard src/*.c))))
 
-all: $(BIN)
+all: game
 
 $(OBJDIR)/%.o: src/%.c
 	$(CC) $(CFLAGS) -o $@ -c $<
@@ -122,7 +97,7 @@ $(OBJDIR)/%.o: src/%.c
 $(OBJDIR)/%.o: src/%.cpp
 	$(CXX) $(CFLAGS) -o $@ -c $<
 
-$(BIN): $(OBJ_C) $(OBJ_CPP)
+game: $(OBJ_C) $(OBJ_CPP)
 	$(LD) -o $(BIN) $(OBJ_C) $(OBJ_CPP) $(LIBS) $(LFLAGS)
 
 clean:

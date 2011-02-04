@@ -1,34 +1,76 @@
 #include "Animation.h"
-#include "Debug.h"
-
-#include <fstream>
 #include <iostream>
+#include <fstream>
 
-
-void Animation::Add_frame(ALLEGRO_BITMAP* bitmap)
+bool Animation::Load(std::string filename)
 {
-	mon_assert(NULL != bitmap)
-	frames.push_back(bitmap);
+	std::string folder;
+	size_t pos = filename.find_last_of('/');
+	if(pos!=std::string::npos)
+		folder = filename.substr(0, pos+1);
+	
+	std::ifstream file;
+	file.open(filename.c_str());
+
+	bool loading = false;
+	while(!file.eof())
+	{
+		std::string line;
+		std::getline(file, line);
+
+		if(line == "start")
+		{
+			loading = true;
+			continue;
+		}
+		if(line == "end")
+			loading = false;
+			
+		if(loading)
+		{
+			ALLEGRO_BITMAP *bitmap;
+			bitmap = al_iio_load((folder+line).c_str());
+			if(!bitmap)
+			{
+				std::cout<<line<<" failed to load"<<std::endl;
+			}
+			else
+				frames.push_back(bitmap);
+		}
+	}
+
+	file.close();
+	return true;
 }
 
+Animation::~Animation()
+{
+	for(Frames::iterator i = frames.begin(); i!=frames.end(); ++i)
+	{
+		al_destroy_bitmap(*i);
+	}
+}
 
 double Animation::Frame_time()
 {
-	return 0.3;
+	return .3;
 }
-
 
 int Animation::Number_of_frames()
 {
 	return frames.size();
 }
 
-
-void Animation::Render_frame(int frame, float x, float y, float scale, bool hflip)
+void Animation::Render_frame(int frame, float x, float y, float scale)
 {
-	if (frame<(int)frames.size())
-	{
-		mon_assert(frames[frame])
-		al_draw_rotated_scaled_bitmap(frames[frame], al_get_bitmap_width(frames[frame])/2, al_get_bitmap_height(frames[frame])/2, x, y, scale*(hflip?-1:1), scale, 0, 0);
-	}
+	//al_draw_bitmap(frames[frame], x, y, 0);
+/*	al_draw_scaled_bitmap(
+		frames[frame], 
+		0, 0, frames[frame]->w, frames[frame]->h,
+		x, y, frames[frame]->w, frames[frame]->h, 
+		0
+	)
+*/
+//frames[frame]->w/2 frames[frame]->h/2
+	al_draw_rotated_scaled_bitmap(frames[frame], 0, 0, x, y, scale, scale, 0, 0);
 }
