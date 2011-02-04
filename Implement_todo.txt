@@ -1,0 +1,40 @@
+This file is here so we can add/update things that are NEEDED so we can implement things.
+
+Feel free to change frequently.
+
+
+Maps:
+	Multiple Layers
+		# tiles: Need to know height and width of layer (in tiles)
+		DRAW_LAYER flag: Some layers may not need to be drawn (like a collision layer)
+
+	Tilemaps
+		BITMAP resource of tileset
+		Dimensions of the tiles: These SHOULD be 32x32, but I don't want to hard-code those values in unless we really need to
+		Tile animation sequences: Need to know which tiles should animate (and the timing)
+
+	Entities
+		Current (absolute) position: need to know where they are in x/y coordinates
+		From and To tile positions: need to know what tile the Entity is on, and where they are trying to move to
+
+
+Entities:
+	Items
+		List of items this Entity is carrying
+			Player:  Will have a large list (weapons, armor, etc.)
+			NPCs:    May have a few, though they won't be able to drop them
+			         *** They MAY be able to give them to the Player, if we wish to implement that feature ***
+			Enemies: Will have a smaller list (mostly just their weapon(s), armor, and any special items they can drop)
+
+	Stats
+		AP, DP, Agility, etc.
+
+	State
+		Entities can be: MOVEMENT_SIT, MOVEMENT_STAND, MOVEMENT_RANDOM, MOVEMENT_SCRIPTED, etc.
+
+	Command Processor
+		Depending on the State, entity movements will be issued "commands"
+			MOVE_UP,
+			MOVE_TARGET(Target *target),
+			ATTACK_LEFT,
+			ATTACK_TARGET(Target *target)

@@ -1,0 +1,61 @@
+<map>
+  tile_width = 32
+  tile_height = 32
+</map>
+
+
+<layer>
+  tilemap = media/tileset_placeholder.png
+  width   = 9
+  height  = 16
+  0       =  0  0  0  0 14  0  0  0  0
+  1       =  0 14 14 14  0 14 14 14  0
+  2       =  0 14  0  0  0  0  0 14  0
+  3       =  0 14  0  0  0  0  0 14  0
+  4       =  0 14  0  0 14  0  0 14  0
+  5       =  0 14  0  0  0  0  0 14  0
+  6       =  0 14  0  0  0  0  0 14  0
+  7       =  0 14  0  0  0  0  0 14  0
+  8       =  0 14  0  0  0  0  0 14  0
+  9       =  0 14  0  0 14  0  0 14  0
+  10      =  0 14  0  0  0  0  0 14  0
+  11      =  0 14  0  0  0  0  0 14  0
+  12      =  0 14  0  0  0  0  0 14  0
+  13      =  0 14  0  0  0  0  0 14  0
+  14      =  0 14 14 14 14 14 14 14  0
+  15      =  0  0  0  0  0  0  0  0  0
+</layer>
+
+
+<obstaclemap>
+  width      = 9
+  height     = 16
+  0          = 0 0 0 0 1 0 0 0 0
+  1          = 0 1 1 1 0 1 1 1 0
+  2          = 0 1 0 0 0 0 0 1 0
+  3          = 0 1 0 0 0 0 0 1 0
+  4          = 0 1 0 0 1 0 0 1 0
+  5          = 0 1 0 0 0 0 0 1 0
+  6          = 0 1 0 0 0 0 0 1 0
+  7          = 0 1 0 0 0 0 0 1 0
+  8          = 0 1 0 0 0 0 0 1 0
+  9          = 0 1 0 0 1 0 0 1 0
+  10         = 0 1 0 0 0 0 0 1 0
+  11         = 0 1 0 0 0 0 0 1 0
+  12         = 0 1 0 0 0 0 0 1 0
+  13         = 0 1 0 0 0 0 0 1 0
+  14         = 0 1 1 1 1 1 1 1 0
+  15         = 0 0 0 0 0 0 0 0 0
+</obstaclemap>
+
+
+#  TRIGGER: Doorway on the top that loads Map 1 when activated.
+<entity>
+  name       = test2_to_test1
+  tile_x     = 5
+  tile_y     = 2
+  interact   = Maploader
+  map        = media/test.map string
+#  This should match the "name" of the entity found in the target map
+  dest_name  = test1_to_test2 string
+</entity>

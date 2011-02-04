@@ -1,0 +1,481 @@
+
+src/Animation.cpp,146
+void Animation::Add_frame(8,84
+double Animation::Frame_time(15,195
+int Animation::Number_of_frames(21,245
+void Animation::Render_frame(27,308
+
+src/Animator.cpp,227
+Animator::Animator(10,112
+void Animator::Set_animations(19,190
+void Animator::Set_animation(26,300
+void Animator::Update(38,476
+void Animator::Render(53,708
+void Animator::Render(59,817
+Animations Load_animations(66,945
+
+src/Camera.cpp,213
+Camera::Camera(7,62
+void Camera::Set_position(13,96
+Vector Camera::Get_position(21,218
+Vector Camera::Apply(27,272
+void Camera::Set_viewport(33,339
+void Camera::Update(40,452
+void Camera::Set_rumble(49,670
+
+src/Container.cpp,424
+Container::Container(9,104
+void Container::Set_game(15,147
+Game* Container::Get_game(21,206
+Container::~Container(27,254
+void Container::Add_entity(36,382
+void Container::Remove_entity(43,474
+int Container::Number_of_entities(50,569
+Entities& Container::Get_entities(56,636
+void Container::Render(62,696
+void Container::Pick_up(84,1288
+void Container::Interact(100,1614
+void Container::Process_removals(116,1924
+
+src/Debug.cpp,176
+u32 showDebug 12,180
+void debugOn(21,363
+void debugOff(71,1944
+void Monday_assert(82,2172
+void Monday_log(89,2339
+void Monday_out(113,3245
+void Show_attributes(141,3888
+
+src/Entity.cpp,1427
+Entity::Entity(17,284
+Entity::~Entity(42,678
+void Entity::Load(47,707
+void Entity::Set_animations(265,7320
+bool Entity::operator < Entity::operator <271,7422
+void Entity::Set_position(277,7521
+Vector Entity::Get_position(283,7588
+void Entity::Set_movement(289,7648
+void Entity::Set_movement_speed(312,8303
+float Entity::Get_movement_speed(318,8385
+void Entity::Set_speed_boost(324,8456
+float Entity::Get_speed_boost(330,8532
+void Entity::Set_script(336,8597
+bool Entity::Pick_up(365,9043
+bool Entity::Interact(378,9319
+void Entity::Attack(391,9598
+void Entity::Update(397,9686
+void Entity::Render(420,10237
+void Entity::Destroy(431,10558
+bool Entity::Destroyed(437,10612
+bool Entity::Line_collision(443,10668
+bool Entity::Circle_collision(450,10825
+bool Entity::Point_blocked(465,11171
+void Entity::Set_solid(473,11310
+bool Entity::Is_solid(491,11567
+void Entity::Set_Dimensions(497,11618
+float Entity::Get_Size(504,11729
+void Entity::Set_Name(510,11780
+std::string Entity::Get_Name(516,11861
+int Entity_set_position(525,11943
+int Entity_set_position_tile(541,12321
+int Entity_set_position_name(572,13044
+int Entity_set_movement(604,13805
+int Entity_get_position(620,14183
+int Entity_get_position_tile(641,14673
+int Entity_set_script(661,15222
+int Entity_set_animations(679,15764
+int Entity_set_solid(695,16194
+int Entity_set_name(709,16528
+void Entity_register_lua_callbacks(723,16865
+
+src/Entity_manager.cpp,560
+Entity_manager::Entity_manager(11,130
+Entity_manager::~Entity_manager(17,183
+void Entity_manager::Set_player(22,223
+void Entity_manager::Set_game(28,297
+Entity* Entity_manager::Create_entity(34,361
+void Entity_manager::Destroy_entity(48,615
+void Entity_manager::Update(58,852
+void Entity_manager::Transfer_entity(75,1131
+void Entity_manager::Assert_entity(84,1343
+void Entity_manager::Assert_container(90,1494
+int Destroy_entity(102,1748
+int Create_entity(112,2000
+int Transfer_entity(123,2300
+void Entity_manager_register_lua_callbacks(145,2879
+
+src/Game.cpp,838
+GAME_CONTROL_DEFS game_control_defs[game_control_defs13,206
+int Game_get_player(23,857
+int Game_load_map(31,1015
+int Game_get_map(42,1315
+Game::Game(50,1467
+Game::~Game(59,1569
+void Game::Run(64,1594
+void Game::Init(147,3531
+void Game::Update(180,4458
+void Game::Render(198,4856
+void Game::Event(218,5270
+void Game::Game_event(267,6331
+game_event_n Game::Get_next_game_event(305,7172
+void Game::Queue_game_event(311,7250
+void Game::Close_menu(316,7328
+void Game::Quit_game(322,7391
+ALLEGRO_FONT* Game::Get_font(327,7438
+Player* Game::Get_player(333,7495
+Entity_manager& Game::Get_entity_manager(339,7551
+Lua_wrapper& Game::Get_lua_wrapper(345,7630
+Obstacle_manager& Game::Get_obstacle_manager(351,7700
+Resource_manager& Game::Get_resource_manager(357,7785
+Map* Game::Get_map(363,7870
+void Game::Load_map(369,7916
+
+src/Gui.cpp,258
+Gui::Gui(5,41
+ALLEGRO_FONT* Gui::Get_font(10,73
+void Gui::Set_font(16,129
+char* gen_button_tag(22,200
+Button::Button(31,324
+Button::Button(40,444
+Button::Button(46,503
+Button::~Button(58,821
+void Button::Draw(65,902
+void Button::Draw_Centre(71,963
+
+src/Image_resource.cpp,169
+Image_resource::Image_resource(4,30
+Image_resource::~Image_resource(10,83
+bool Image_resource::Load(16,151
+ALLEGRO_BITMAP* Image_resource::Get_allegro_bitmap(30,315
+
+src/Keyboard_menu.cpp,421
+KEYBOARD_POS keyb_pos_104[keyb_pos_10411,308
+void keyrenderGL(172,3614
+ALLEGRO_FONT *large_font,large_font176,3643
+ALLEGRO_FONT *large_font, *small_font;small_font176,3643
+int choose_mode 178,3685
+void draw_keycap_text(181,3764
+draw_virtual_keyboard(213,4812
+draw_keyselect_table(275,7009
+Keyboard_menu::Keyboard_menu(319,8180
+void Keyboard_menu::Render(347,9017
+game_event_n Keyboard_menu::Event(390,10676
+
+src/Layer.cpp,112
+Layer::Layer(14,168
+void Layer::Load(19,189
+void Layer::Render(105,2665
+void Layer::Set_Dimensions(123,3094
+
+src/Lua_wrapper.cpp,409
+std::map<lua_State*, Game*> Lua_wrapper::gamemap;7,67
+Lua_wrapper::Lua_wrapper(10,119
+Lua_wrapper::~Lua_wrapper(16,165
+void Lua_wrapper::Init(23,231
+void Lua_wrapper::Deinit(31,340
+void Lua_wrapper::Load_script(38,405
+void Lua_wrapper::Call(58,746
+lua_State* Lua_wrapper::Prepare(74,1037
+void Lua_wrapper::Call(85,1243
+lua_State* Lua_wrapper::Get_state(97,1530
+Game* Lua_wrapper::Get_game(103,1587
+
+src/Main.cpp,59
+bool parseArgs(9,149
+void help(71,1611
+int main(80,1980
+
+src/Main_menu.cpp,97
+Main_menu::Main_menu(8,88
+void Main_menu::Render(15,157
+game_event_n Main_menu::Event(48,1569
+
+src/Map.cpp,185
+Map::Map(13,181
+Map::~Map(22,321
+void Map::Load_Dimensions(36,605
+void Map::Load(96,2299
+void Map::Render(146,3737
+void Map::Add_entity(169,4023
+void Map::Remove_entity(179,4181
+
+src/Menu.cpp,287
+Menu::Menu(8,75
+Menu::~Menu(16,143
+void Menu::Open_child(23,190
+void Menu::Base_event(29,245
+game_event_n Menu::Event(53,701
+void Menu::Render(59,780
+void Menu::Close_child(64,806
+void Menu::Add_button(71,867
+int Menu_add_button(79,955
+void Menu_register_lua_callbacks(96,1276
+
+src/Obstacle.cpp,26
+Obstacle::~Obstacle(3,23
+
+src/Obstacle_manager.cpp,287
+typedef std::list<Collision_data> Collision_datas;9,96
+void Obstacle_manager::Add_obstacle(11,148
+void Obstacle_manager::Remove_obstacle(18,265
+bool Obstacle_manager::Line_collision(27,504
+bool Obstacle_manager::Circle_collision(42,887
+bool Obstacle_manager::Point_blocked(80,1842
+
+src/Obstacle_map.cpp,286
+Obstacle_map::Obstacle_map(12,153
+void Obstacle_map::Load(17,188
+bool Obstacle_map::Line_collision(112,2543
+bool Obstacle_map::Circle_collision(189,4002
+bool Obstacle_map::Point_blocked(276,6137
+bool Obstacle_map::Tile_blocked(284,6306
+void Obstacle_map::Set_Dimensions(295,6530
+
+src/Options_menu.cpp,111
+Options_menu::Options_menu(16,362
+void Options_menu::Render(36,931
+game_event_n Options_menu::Event(73,2351
+
+src/Parse_Lines.cpp,141
+bool seek_non_comment_line(25,714
+bool name_and_value(66,2015
+std::vector<std::string> tokenize(137,4144
+std::string next_token(167,4929
+
+src/Player.cpp,189
+Player::Player(10,100
+void Player::Event(29,385
+void Player::Keypress(58,796
+void Player::Keyrelease(111,2063
+void Player::Render(137,2361
+void Player_register_lua_callbacks(170,3638
+
+src/Resource_manager.cpp,83
+Resource_manager::Resource_manager(4,35
+Resource_manager::~Resource_manager(8,81
+
+src/Tileset.cpp,144
+Tileset::Tileset(13,132
+Tileset::~Tileset(19,172
+void Tileset::Set_Dimensions(24,198
+void Tileset::Load(31,303
+void Tileset::Render(47,765
+
+src/Vector.cpp,897
+Vector::Vector(4,38
+Vector::Vector(11,73
+void Vector::Set(17,127
+const Vector& Vector::operator=(Vector::operator=24,184
+bool Vector::operator!=(Vector::operator!=32,274
+bool Vector::operator==(Vector::operator==38,351
+float Vector::X(48,462
+float Vector::Y(54,503
+float Vector::Length(60,544
+float Vector::Length_squared(66,611
+void Vector::Normalize(72,671
+Vector Vector::Normalized(83,773
+float Vector::Dotproduct(94,910
+const Vector& Vector::operator+=(Vector::operator+=100,991
+const Vector& Vector::operator-=(Vector::operator-=108,1080
+const Vector& Vector::operator*=(Vector::operator*=116,1169
+const Vector& Vector::operator/=(Vector::operator/=124,1246
+const Vector Vector::operator-(132,1323
+const Vector Vector::operator+(138,1413
+void Vector::Zero(144,1503
+Vector Vector::operator/(151,1541
+Vector Vector::operator*(159,1636
+float Vector::Angle(167,1731
+
+include/Animation.h,99
+#define Animation_h2,21
+typedef std::vector<ALLEGRO_BITMAP*> Frames;8,116
+class Animation13,223
+
+include/Animator.h,154
+#define Animator_h2,19
+typedef std::map<std::string,std::string9,128
+typedef std::map<std::string, Animation*> Animations;9,128
+class Animator14,241
+
+include/Camera.h,42
+#define Camera_h2,17
+class Camera10,157
+
+include/Container.h,94
+#define Container_h2,20
+typedef std::vector<Entity*> Entities;13,127
+class Container18,221
+
+include/Debug.h,331
+#define Debug_h2,16
+enum LevelDefinitions14,230
+	CRITICAL_LEVEL 20,446
+	ERROR_LEVEL,28,785
+	WARNING_LEVEL,36,1167
+	SUGGESTION_LEVEL,43,1433
+	VERBOSE_LEVEL4,51,1817
+	VERBOSE_LEVEL3,52,1834
+	VERBOSE_LEVEL2,53,1851
+	VERBOSE_LEVEL1,54,1868
+	NUM_DEBUG_DEFINITIONS59,1983
+#define mon_assert(79,2357
+#define printlog(84,2530
+
+include/Entity.h,340
+#define Entity_h2,17
+class Entity:Entity25,348
+		enum ScriptEntity::Script194,4385
+			PICK_UP,Entity::Script::PICK_UP196,4403
+			INTERACT,Entity::Script::INTERACT197,4415
+			ATTACK,Entity::Script::ATTACK198,4428
+			UPDATE,Entity::Script::UPDATE199,4439
+		typedef std::map<Script, std::string> Scripts;Entity::Scripts201,4455
+
+include/Entity_manager.h,162
+#define Entity_manager_h2,25
+typedef std::map<Entity*Entity18,237
+typedef std::map<Entity*, Container*> Contained_entities;18,237
+class Entity_manager24,391
+
+include/Game_events.h,307
+#define Game_events_h2,22
+typedef enum game_event_n5,46
+	GAME_EVENT_EXIT 7,74
+	GAME_EVENT_NONE 8,97
+	GAME_EVENT_MAIN_MENU,9,119
+	GAME_EVENT_PLAY_GAME,10,142
+	GAME_EVENT_LOAD_GAME,11,165
+	GAME_EVENT_OPTIONS_MENU,12,188
+	GAME_EVENT_KEYBOARD_MENU,13,214
+	GAME_EVENT_USER15,242
+} game_event_n;16,259
+
+include/Game.h,196
+#define Game_h2,16
+enum GCD_AXISTYPE13,220
+	GCD_BUTTON,15,242
+	GCD_AXIS_LOW,16,256
+	GCD_AXIS_HIGH17,272
+typedef struct GAME_CONTROL_DEFS 21,296
+} GAME_CONTROL_DEFS;36,628
+class Game44,824
+
+include/Gui.h,56
+#define Gui_h2,15
+class Gui11,115
+class Button22,254
+
+include/Image_resource.h,74
+#define Image_resource_h2,25
+class Image_resource:Image_resource10,165
+
+include/Keyboard_menu.h,187
+#define Keyboard_menu_h2,25
+typedef struct KEYBOARD_POS 9,113
+} KEYBOARD_POS;12,168
+typedef struct KEYBOARD_DEF16,255
+} KEYBOARD_DEF;22,354
+class Keyboard_menu:Keyboard_menu25,375
+
+include/Layer.h,125
+#define Layer_h2,17
+typedef std::vector<Tile> Column;10,122
+typedef std::vector<Column> Tilemap;11,157
+class Layer17,243
+
+include/Lua_wrapper.h,52
+#define Lua_wrapper_h2,22
+class Lua_wrapper18,251
+
+include/Main.h,20
+#define Main_h2,16
+
+include/Main_menu.h,57
+#define Main_menu_h2,20
+class Main_menu:Main_menu6,60
+
+include/Map.h,181
+#define Map_h2,15
+typedef std::vector<Layer> Layers;18,271
+class Map:Map23,331
+		int Get_TileWidth(Map::Get_TileWidth54,1125
+		int Get_TileHeight(Map::Get_TileHeight59,1275
+
+include/Menu.h,38
+#define Menu_h2,16
+class Menu13,136
+
+include/Obstacle.h,148
+#define Obstacle_h2,19
+class Collision_data11,153
+private:Collision_data::private16,221
+class Obstacle22,306
+private:Obstacle::private39,832
+
+include/Obstacle_manager.h,108
+#define Obstacle_manager_h2,27
+typedef std::list<Obstacle*> Obstacles;8,129
+class Obstacle_manager13,224
+
+include/Obstacle_map.h,200
+#define Obstacle_map_h2,23
+class Obstacle_map:Obstacle_map12,184
+		typedef std::vector<bool> Column;Obstacle_map::Column16,232
+		typedef std::vector<Column> Tilemap;Obstacle_map::Tilemap17,268
+
+include/Options_menu.h,68
+#define Options_menu_h2,23
+class Options_menu:Options_menu16,204
+
+include/Parse_Lines.h,87
+#define Parse_Lines_h2,23
+T String_to_type(25,743
+std::string Type_to_string(36,893
+
+include/Player.h,50
+#define Player_h2,18
+class Player:Player20,299
+
+include/Resource.h,104
+#define __resource_h__2,24
+class Resource 9,128
+        virtual ~Resource(Resource::~Resource13,201
+
+include/Resource_manager.h,244
+#define Resource_Manager_h2,28
+typedef std::map <std::string,std::string12,164
+typedef std::map <std::string, Resource*> Resource_map;12,164
+class Resource_manager17,282
+        template <typename T> T *Load(Resource_manager::Load36,694
+
+include/StdTypes.h,378
+#define StdTypes_h2,20
+typedef unsigned int   u32;9,123
+typedef signed int     s32;10,152
+typedef unsigned short u16;11,181
+typedef signed short   s16;12,210
+typedef unsigned char  u8;13,239
+typedef signed char    s8;14,267
+typedef std::map<std::string,std::string18,351
+typedef std::map<std::string, std::string> Attributes;18,351
+typedef std::string id_type;22,475
+
+include/Tileset.h,87
+#define Tileset_h2,19
+class Tile12,249
+	Tile(Tile::Tile15,273
+class Tileset23,380
+
+include/Trigger.h,212
+#define Trigger_h2,19
+	TRIGGER_TYPE_NONE 11,149
+	TRIGGER_TYPE_PROXIMITY,16,292
+	TRIGGER_TYPE_INTERACT,21,423
+	NUM_TRIGGER_TYPES24,490
+} trigger_t;25,510
+class Trigger28,528
+class Trigger_proximity 42,699
+
+include/Vector.h,42
+#define __VECTOR_H2,19
+class Vector7,78

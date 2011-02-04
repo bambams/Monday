@@ -1,0 +1,59 @@
+Title: Code todo
+
+Section: Bugs
+Topic: Camera viewport topleft isn't used
+
+Topic: Assert_container in Entity_manager is not in working condition
+
+Section: Tasks
+Here's what we've got planned.
+
+Topic: Long running scripts
+	When for instance using an item that triggers a cutscene
+	Register script function in Game
+	Game keeps calling registered lua functions every update until they return the "I'm finished" return value.
+
+Topic: Inventory menu
+	Info about item on mouseover
+	Equip with a click, right click to bind to right mouse button, left to bind to left.
+	Use/Drop item, low prio, this is not in design
+
+Topic: Entity Set_size
+	Circle size for collision
+
+Topic: Basic combat
+	Entities need to be attackable.
+
+Topic: Entity templates
+	We could do a .etf (entity template file) format.
+	Using the same method as <entity> loading in .map files,
+	but save the attributes under template names that can be referenced
+	by entities that are loaded later.
+
+Topic: Player special equipment
+	These should be scripted right? Make sure it can be done.
+
+	Jetpack - skip checking if you're over a hole or electric floor or something
+		as long as the pack is equipped and firing.
+		draw player a few pixels higher.
+	Grenade - 3D in drawing only; it arcs. "That's a call to calc_spline(). No complexity."
+
+Topic: Animated tiles
+	Implement in Tileset class and the .tileset file
+
+Topic: Variable animation frame times
+	Right now all frames in an animation has the same frame time. We might want to have different times for each frame.
+
+Topic: Default animation
+	When loading an animation set, a default animation should be set.
+
+Topic: Camera effect scripts
+	Stuff like shaking, rotating etc could be supported. Low priority.
+	(The Rumble feature in the camera class should be replaced with a script.)
+
+Topic: Make player move to correct entrypoint when a map is loaded
+
+Topic: Font resource
+	Now there's a Get_font function in Game. That's rather limited, we should have a better way to handle fonts.
+
+Topic: Handle complex collision situations better
