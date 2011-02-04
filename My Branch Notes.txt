@@ -1,0 +1,14 @@
+This is MY branch of the project. I will do what I can, where I can...
+
+2008/10/02 11:58:00am-EST:
+
+I've included some weapon sounds:
+/donald/Monday/wip_media/WeaponSFX/
+
+I've included some old civil defense posters as well:
+/donald/Monday/wip_media/Posters/
+
+I will modify the code/graphics later...just want to get these uploaded for now. :)
+
+2009/02/17 02:12:00pm-EST:
+I've upgraded to the new 4.9.8 version of the Allegro API

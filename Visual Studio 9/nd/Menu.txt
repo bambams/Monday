@@ -1,0 +1,93 @@
+Format: 1.35
+
+
+Title: Monday project
+SubTitle: Beating the odds
+
+# You can add a footer to your documentation like this:
+# Footer: [text]
+# If you want to add a copyright notice, this would be the place to do it.
+
+
+# --------------------------------------------------------------------------
+# 
+# Cut and paste the lines below to change the order in which your files
+# appear on the menu.  Don't worry about adding or removing files, Natural
+# Docs will take care of that.
+# 
+# You can further organize the menu by grouping the entries.  Add a
+# "Group: [name] {" line to start a group, and add a "}" to end it.
+# 
+# You can add text and web links to the menu by adding "Text: [text]" and
+# "Link: [name] ([URL])" lines, respectively.
+# 
+# The formatting and comments are auto-generated, so don't worry about
+# neatness when editing the file.  Natural Docs will clean it up the next
+# time it is run.  When working with groups, just deal with the braces and
+# forget about the indentation and comments.
+# 
+# You can use this file on other computers even if they use different
+# directories.  As long as the command line points to the same source files,
+# Natural Docs will be able to correct the locations automatically.
+# 
+# --------------------------------------------------------------------------
+
+
+Group: Classes  {
+
+   File: Animation  (/home/anders/allegro/monday/trunk/include/Animation.h)
+   File: Animator  (/home/anders/allegro/monday/trunk/include/Animator.h)
+   File: Camera  (/home/anders/allegro/monday/trunk/include/Camera.h)
+   File: Collision_data  (/home/anders/allegro/monday/trunk/include/Obstacle.h)
+   File: Container  (/home/anders/allegro/monday/trunk/include/Container.h)
+   File: Debug  (/home/anders/allegro/monday/trunk/include/Debug.h)
+   File: Entity  (/home/anders/allegro/monday/trunk/include/Entity.h)
+   File: Entity_manager  (/home/anders/allegro/monday/trunk/include/Entity_manager.h)
+   File: Game  (/home/anders/allegro/monday/trunk/include/Game.h)
+   File: Image_resource  (/home/anders/allegro/monday/trunk/include/Image_resource.h)
+   File: Layer  (/home/anders/allegro/monday/trunk/include/Layer.h)
+   File: Lua_wrapper  (/home/anders/allegro/monday/trunk/include/Lua_wrapper.h)
+   File: Map  (/home/anders/allegro/monday/trunk/include/Map.h)
+   File: Obstacle_manager  (/home/anders/allegro/monday/trunk/include/Obstacle_manager.h)
+   File: Obstacle_map  (/home/anders/allegro/monday/trunk/include/Obstacle_map.h)
+   File: Player  (/home/anders/allegro/monday/trunk/include/Player.h)
+   File: Resource  (/home/anders/allegro/monday/trunk/include/Resource.h)
+   File: Resource_manager  (/home/anders/allegro/monday/trunk/include/Resource_manager.h)
+   File: Tile  (/home/anders/allegro/monday/trunk/include/Tileset.h)
+   File: Vector  (/home/anders/allegro/monday/trunk/include/Vector.h)
+   }  # Group: Classes
+
+Group: Game creation  {
+
+   File: Lua bindings  (no auto-title, /home/anders/allegro/monday/trunk/docsrc/Lua_bindings.txt)
+   File: File formats  (/home/anders/allegro/monday/trunk/docsrc/File_formats.txt)
+   }  # Group: Game creation
+
+Group: Todo  {
+
+   File: Code  (no auto-title, /home/anders/allegro/monday/trunk/docsrc/Code_todo.txt)
+   File: Documentation todo  (/home/anders/allegro/monday/trunk/docsrc/Docs_todo.txt)
+   }  # Group: Todo
+
+File: Debug.cpp  (/home/anders/allegro/monday/trunk/src/Debug.cpp)
+File: Gui.cpp  (/home/anders/allegro/monday/trunk/src/Gui.cpp)
+File: main.cpp  (/home/anders/allegro/monday/trunk/src/main.cpp)
+File: Parse_Lines.cpp  (/home/anders/allegro/monday/trunk/src/Parse_Lines.cpp)
+
+Group: Index  {
+
+   Index: Everything
+   Class Index: Classes
+   Function Index: Functions
+   Macro Index: Macros
+   Type Index: Types
+   Constant Index: Constants
+   File Index: Files
+   }  # Group: Index
+
+
+
+##### Do not change or remove these lines. #####
+Data: 1(D3333RuEG3p\fGH63pooG`Hu3Eu\fpQ3tHN\A38\9oNfG)
+Data: 1(h3333RuEG3p\fGH63pooG`Hu3Eu\fpQ3tHN\A36H9)
+Data: 1(T3333RuEG3p\fGH63pooG`Hu3Eu\fpQ3tHN\A3fu96H9)

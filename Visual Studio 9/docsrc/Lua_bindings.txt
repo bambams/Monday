@@ -1,0 +1,84 @@
+Title: Lua bindings
+
+Section: Game.cpp
+
+Function: Get_player
+Returns:
+Reference to the Player instance.
+
+
+Function: Load_map
+Loads a map.
+
+Parameters:
+A string naming the file to load.
+
+
+Function: Get_map
+Get a reference to the map.
+Can be used as a container.
+
+Returns:
+Reference to the map instance.
+
+Section: Entity_manager.cpp
+Function: Create_entity
+Creates and Initializes a new Entity.
+
+Parameters:
+<Container> - A container to put the new <entity> in, can be map, player or an entity.
+
+Returns:
+Reference to a new <Entity>
+
+
+Function: Destroy_entity
+Parameters:
+entity - The <Entity> instance to destroy.
+
+
+Function: Transfer_entity
+Moves an <entity> to a new <container>.
+
+Parameters:
+entity - Which entity to transfer
+container - Where to put the entity.
+
+Section: Entity.cpp
+	 Function: Entity_set_position
+		Parameters:
+			entity - entity to move
+			x, y - position
+	lua_register(state, "Entity_set_position", Entity_set_position);
+
+	 Function: Entity_get_position
+		Parameters:
+			entity - entity
+		Returns:
+			x, y
+	lua_register(state, "Entity_get_position", Entity_get_position);
+
+	 Function: Entity_set_movement
+		Parameters:
+			entity - entity
+			x, y - Velocity vector
+	lua_register(state, "Entity_set_movement", Entity_set_movement);
+
+	 Function: Entity_set_script
+		Parameters:
+			entity - entity
+			script - string handle to a lua function.
+	lua_register(state, "Entity_set_script", Entity_set_script);
+
+	 Function: Entity_set_animations
+		Parameters:
+			entity - entity
+			filename - string handle to adf file.
+	lua_register(state, "Entity_set_animations", Entity_set_animations);
+
+	 Function: Entity_set_solid
+		Parameters:
+			entity - entity
+			solid - true or false
+	lua_register(state, "Entity_set_solid", Entity_set_solid);
+

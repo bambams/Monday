@@ -1,0 +1,17 @@
+It's probably a good idea to record bugs in this file. Anyone interested 
+in fixing one is welcome to it. This is for bugs in already-implemented
+functionality, not things still to be implemented; use Implement_todo.txt
+for that.
+
+--Entities are not drawn until they move
+
+Fixed:
+--Pressing esc from main menu starts game--should quit
+--Options menu doesn't work (clicking that on main has no effect)
+
+--Pressing 'z' on the left or right rectangle (map switches) gives a 
+  map/set iterator no incrementable debug assertion. -DF 2009/02/17
+  
+--App doesn't always seem to start...at least on Windows Server 2008 (Vista)
+  The program is indeed in the process chart, but not visible. Is this an
+  Allegro bug? -DF 2009/02/17
