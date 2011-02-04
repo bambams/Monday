@@ -1,9 +1,7 @@
 #include "Main_menu.h"
 
-#include "Debug.h"
+#include "main.h"
 #include "Game.h"
-#include "Main.h"
-
 
 Main_menu::Main_menu(Game* game)
 :Menu(game)
@@ -11,19 +9,18 @@ Main_menu::Main_menu(Game* game)
 {
 }
 
-
 void Main_menu::Render()
 {
-	ALLEGRO_COLOR green = al_map_rgba_f(0, 0.5, 0, 1);
-	ALLEGRO_COLOR bright = al_map_rgba_f(0.25, 0.75, 0.25, 1);
+    ALLEGRO_COLOR green = al_map_rgba_f(0, 0.5, 0, 1);
+    ALLEGRO_COLOR bright = al_map_rgba_f(0.25, 0.75, 0.25, 1);
 	ALLEGRO_FONT* font = game->Get_font();
 	int fh = 20;
-	int n = 3, y, cx;
+	int n = 3, y, cx; 
 	
 	y = al_get_display_height()/2 - (fh * n) /2;
-	
+
 	cx = al_get_display_width()/2;
-	
+
 	if(font)
 	{
 		al_set_blender(ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA, (option==0) ? bright : green );
@@ -47,11 +44,11 @@ void Main_menu::Render()
 
 game_event_n Main_menu::Event(ALLEGRO_EVENT event)
 {
-	game_event_n ret = GAME_EVENT_NONE;
+game_event_n ret = GAME_EVENT_NONE;
 
 	if (event.type == ALLEGRO_EVENT_KEY_DOWN)
 	{
-
+		
 		switch (event.keyboard.keycode)
 		{
 		case ALLEGRO_KEY_UP:
@@ -64,16 +61,17 @@ game_event_n Main_menu::Event(ALLEGRO_EVENT event)
 			break;
 		case ALLEGRO_KEY_SPACE:
 		case ALLEGRO_KEY_ENTER:
-			Monday_out(VERBOSE_LEVEL2, std::cout, "Main Menu - press option=%d\n", option);
-			switch (option)
+			printf("Main Menu - press option=%d \n", option);
+			switch (option) 
 			{
 				case 0: ret = GAME_EVENT_PLAY_GAME; break;
 				case 1: ret = GAME_EVENT_OPTIONS_MENU; break;
 				case 2: ret = GAME_EVENT_EXIT; break;
-			}
+			}	
 			break;
 		}
 	}
 
 	return ret;
 }
+

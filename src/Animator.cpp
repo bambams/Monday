@@ -1,27 +1,19 @@
 #include "Animator.h"
-
-#include "Debug.h"
+#include <iostream>
+#include <fstream>
 #include "Image_resource.h"
 
-#include <fstream>
-#include <iostream>
-
-
 Animator::Animator()
-:delta(0)
-,frame(0)
-,animation(NULL)
+:animation(NULL)
 ,hflip(false)
 {
 }
 
-
 void Animator::Set_animations(Animations a)
 {
 	animations = a;
-//	animation = animations.begin()->second;
+	animation = animations.begin()->second;
 }
-
 
 void Animator::Set_animation(const std::string& a, bool ihflip)
 {
@@ -33,7 +25,6 @@ void Animator::Set_animation(const std::string& a, bool ihflip)
 		frame=0;
 	}
 }
-
 
 void Animator::Update(double idelta)
 {
@@ -49,12 +40,10 @@ void Animator::Update(double idelta)
 	}
 }
 
-
 void Animator::Render(const Vector& position, float scale)
 {
 	Render(position.X(), position.Y(), scale);
 }
-
 
 void Animator::Render(float x, float y, float scale)
 {
@@ -62,17 +51,16 @@ void Animator::Render(float x, float y, float scale)
 		animation->Render_frame(frame, x, y, scale, hflip);
 }
 
-
 Animations Load_animations(const std::string& filename, Resource_manager& resource_manager)
 {
 	std::string folder;
 	size_t pos = filename.find_last_of('/');
 	if(pos!=std::string::npos)
 		folder = filename.substr(0, pos+1);
-
+	
 	std::ifstream file;
 	file.open(filename.c_str());
-
+	
 	Animations animations;
 	Animation* animation = NULL;
 	std::string name;
@@ -96,10 +84,9 @@ Animations Load_animations(const std::string& filename, Resource_manager& resour
 			animations[name] = animation;
 			loading = false;
 		}
-
+			
 		if(loading)
 		{
-			Monday_out(VERBOSE_LEVEL1, std::cout, "Animations Load_animations()\n\tfolder: \"%s\"\n\tline: \"%s\"\n", folder.c_str(), line.c_str());
 			Image_resource* image = resource_manager.Load<Image_resource>(folder+line);
 			if(image)
 			{

@@ -1,26 +1,19 @@
 #include "Obstacle_manager.h"
-
 #include "Debug.h"
 #include "Obstacle.h"
-
 #include <algorithm>
-
-
-typedef std::list<Collision_data> Collision_datas;
 
 void Obstacle_manager::Add_obstacle(Obstacle* obstacle)
 {
-	mon_assert(obstacle);
+	assert(obstacle);
 	obstacles.push_back(obstacle);
 }
 
-
 void Obstacle_manager::Remove_obstacle(Obstacle* obstacle)
 {
-	mon_assert(obstacle);
+	assert(obstacle);
 	obstacles.erase(std::find(obstacles.begin(), obstacles.end(), obstacle));
 }
-
 
 //TODO: Using collision data, find first collision if several are found...
 
@@ -36,6 +29,7 @@ bool Obstacle_manager::Line_collision(const Vector& line_begin, const Vector& li
 	return false;
 }
 
+typedef std::list<Collision_data> Collision_datas;
 
 //Todo: replace return data with adjust vector and obstacles hit?
 //Collision with self bug
@@ -55,7 +49,7 @@ bool Obstacle_manager::Circle_collision(const Vector& center, float radius, Coll
 		}
 	}
 
-	if (collision_datas.size() > 0)
+	if(collision_datas.size())
 	{
 		Vector total_adjust;
 		for(Collision_datas::iterator i=collision_datas.begin(); i!=collision_datas.end(); ++i)
@@ -68,14 +62,13 @@ bool Obstacle_manager::Circle_collision(const Vector& center, float radius, Coll
 		{
 			i->obstacle->Circle_collision(center+average, radius, temp_data);
 		}
-
+		
 		data.adjust = average;
 
 		return true;
 	}
 	return false;
 }
-
 
 bool Obstacle_manager::Point_blocked(const Vector& position)
 {

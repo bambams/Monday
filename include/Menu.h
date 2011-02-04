@@ -1,8 +1,7 @@
 #ifndef Menu_h
 #define Menu_h
 
-
-#include "Main.h"
+#include "main.h"
 #include "Game_events.h"
 #include "Vector.h"
 
@@ -19,10 +18,8 @@ public:
 	void Base_event(ALLEGRO_EVENT event);
 	virtual void Render();
 	void Add_button(Vector pos);
-
 protected:
 	Game* game;
-
 private:
 	virtual game_event_n Event(ALLEGRO_EVENT event);
 	void Close_child();
@@ -33,5 +30,4 @@ private:
 
 void Menu_register_lua_callbacks(lua_State* state);
 
-
-#endif  //  Menu_h
+#endif
