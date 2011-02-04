@@ -1,3 +1,6 @@
+Note: Added to GitHub by Brandon McCaig. The original repository's life
+was coming to an end so I added it to GitHub to preserve it.
+
 Building
 
 Dependencies
