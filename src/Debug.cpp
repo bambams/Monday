@@ -1,9 +1,10 @@
 #include "Debug.h"
 #include "StdTypes.h"
 
+#include <cstdarg>
+#include <cstdio>
+#include <cstdlib>
 #include <iostream>
-#include <stdarg.h>
-#include <stdlib.h>
 #include <string>
 #include <vector>
 

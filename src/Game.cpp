@@ -65,18 +65,18 @@ void Game::Run()
 {
 	al_init();
 	al_install_keyboard();
-	al_iio_init();
-	al_font_init();
+	al_init_image_addon();
+	al_init_font_addon();
 
 	ALLEGRO_DISPLAY *display;
 	al_set_new_display_flags(ALLEGRO_WINDOWED);
 	display = al_create_display(640, 480);
 
 	ALLEGRO_EVENT_QUEUE *event_queue = al_create_event_queue();
-	al_register_event_source(event_queue, (ALLEGRO_EVENT_SOURCE *)display);
-	al_register_event_source(event_queue, (ALLEGRO_EVENT_SOURCE *)al_get_keyboard());
+	al_register_event_source(event_queue, al_get_display_event_source(display));
+	al_register_event_source(event_queue, al_get_keyboard_event_source());
 
-	font = al_ttf_load_font("media/DejaVuSans.ttf", 20, 0);
+	font = al_load_ttf_font("media/DejaVuSans.ttf", 20, 0);
 	mon_assert(NULL != font && "Could not load media/DejaVuSans.ttf.\n");
 
 	lua_wrapper.Init(this);
@@ -131,7 +131,7 @@ void Game::Run()
 		last_time = current_time;
 		Update(dt);
 
-		al_clear(al_map_rgb(0, 0, 0));
+		al_clear_to_color(al_map_rgb(0, 0, 0));
 		Render();
 		al_flip_display();
 

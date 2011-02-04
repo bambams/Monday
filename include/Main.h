@@ -10,10 +10,9 @@
 extern "C"
 {
 #include <allegro5/allegro5.h>
-#include <allegro5/internal/aintern_bitmap.h>
-#include <allegro5/bitmap_new.h>
-#include <allegro5/a5_ttf.h>
-#include <allegro5/a5_iio.h>
+#include <allegro5/allegro_image.h>
+#include <allegro5/allegro_ttf.h>
+//#include <allegro5/internal/aintern_bitmap.h>
 
 #include <lua.h>
 }

@@ -9,6 +9,7 @@
 /* Defines Attributes, as well as u32, u16, etc. */
 #include "StdTypes.h"
 
+#include <allegro5/allegro_primitives.h>
 #include <iostream>
 #include <string>
 #include <vector>

@@ -1,6 +1,9 @@
 #include "Gui.h"
 #include "Main.h"
 
+#include <allegro.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_primitives.h>
 
 Gui::Gui(Game* game)
 {

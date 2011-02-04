@@ -67,7 +67,7 @@ ifdef MINGDIR
 endif
 endif
 
-LIBS += -la5_iio-4.9.8 -la5_font-4.9.8 -la5_ttf-4.9.8 -llua
+LIBS += `pkg-config --libs allegro-5.1 allegro_font-5.1 allegro_image-5.1 allegro_ttf-5.1` -llua
 
 
 ifdef WINDOWS

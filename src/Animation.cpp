@@ -29,6 +29,6 @@ void Animation::Render_frame(int frame, float x, float y, float scale, bool hfli
 	if (frame<(int)frames.size())
 	{
 		mon_assert(frames[frame])
-		al_draw_rotated_scaled_bitmap(frames[frame], al_get_bitmap_width(frames[frame])/2, al_get_bitmap_height(frames[frame])/2, x, y, scale*(hflip?-1:1), scale, 0, 0);
+		al_draw_scaled_rotated_bitmap(frames[frame], al_get_bitmap_width(frames[frame])/2, al_get_bitmap_height(frames[frame])/2, x, y, scale*(hflip?-1:1), scale, 0, 0);
 	}
 }
