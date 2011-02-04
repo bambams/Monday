@@ -1,0 +1,306 @@
+###############################################################################
+#                                                                             #
+#  Comments MUST always start with a "#" at the first column of the line.     #
+#                                                                             #
+#                                                                             #
+#                             The Monday Project                              #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+
+###############################################################################
+#                                                                             #
+#                                                                             #
+#  1) The game as a whole will use a "global.cfg" configuration file that     #
+#     will tell us the paths where we can find all of our data.               #
+#                                                                             #
+#     This global config file will list all of the Worlds that have been      #
+#     created for the game.  The structure for this will be similar to:       #
+#                                                                             #
+#       worlds_config                                                         #
+#       WORLD_ID_0                                                            #
+#       "./media/world0.cfg"                                                  #
+#                                                                             #
+#       worlds_config                                                         #
+#       WORLD_ID_1                                                            #
+#       "./media/world1.cfg"                                                  #
+#                                                                             #
+#       worlds_config                                                         #
+#       WORLD_ID_2                                                            #
+#       "./media/world2.cfg"                                                  #
+#                                                                             #
+#     After the "worlds_config" line identifier, it lists a single World's    #
+#     unique ID followed by the path to that World's config file.             #
+#                                                                             #
+#                                                                             #
+###############################################################################
+#                                                                             #
+#                                                                             #
+#  2) A World contains all the Maps that are related to that area.  A World   #
+#     may be an overworld, a dungeon, a town, etc.  The World will determine  #
+#     the tilesets (which implies also that tile dimensions MAY be different  #
+#     than 32x32, though this isn't being planned... it's up to the World     #
+#     designers to determine) that all of the Maps it contains will use.      #
+#                                                                             #
+#     So far, there are 2-4 Worlds planned.  Inside of the World's unique     #
+#     "./media/world#.cfg" config file, the list of all the Maps that have    #
+#     been created for that World will be listed, in the same fashion as the  #
+#     "global.cfg" file above:                                                #
+#                                                                             #
+#       maps_config                                                           #
+#       MAP_ID_0                                                              #
+#       "map0.cfg"                                                            #
+#                                                                             #
+#       maps_config                                                           #
+#       MAP_ID_1                                                              #
+#       "map1.cfg"                                                            #
+#                                                                             #
+#       maps_config                                                           #
+#       MAP_ID_2                                                              #
+#       "map2.cfg"                                                            #
+#                                                                             #
+#     After the "maps_config" line identifier, it lists a single Map's        #
+#     unique ID followed by the path to that Map's config file.               #
+#                                                                             #
+#     Worlds will have anywhere from 4..30 Maps in it.  The World is          #
+#     responsible for tracking which Map links to another based on direction  #
+#     the player is moving.  For example:                                     #
+#                                                                             #
+#       ++++++++++++++++++++++++++++++++++++++++                              #
+#       +        *         *         *         +                              #
+#       +        ^         ^         ^         +                              #
+#       +        |         |         |         +                              #
+#       + * <-- MAP1 <--> MAP2 <--> MAP3 --> * +                              #
+#       +        ^         ^         ^         +                              #
+#       +        |         |         |         +                              #
+#       +        v         v         v         +                              #
+#       + * <-- MAP4 <--> MAP5 <--> MAP6 --> * +                              #
+#       +        ^         ^         ^         +                              #
+#       +        |         |         |         +                              #
+#       +        v         v         v         +                              #
+#       + * <-- MAP7 <--> MAP8 <--> MAP9 --> * +                              #
+#       +        |         |         |         +                              #
+#       +        v         v         v         +                              #
+#       +        *         *         *         +                              #
+#       ++++++++++++++++++++++++++++++++++++++++                              #
+#                                                                             #
+#     For this layout, MAP1 points UP to nothing, RIGHT to MAP2, DOWN to      #
+#     MAP4, LEFT to nothing.  MAP2 points UP to nothing, RIGHT to MAP3, DOWN  #
+#     to MAP5, LEFT to MAP1.  MAP3 points UP to nothing, RIGHT to nothing,    #
+#     DOWN to MAP6, LEFT to MAP2.  ...etc...                                  #
+#                                                                             #
+#     Maps themselves will not be aware of which other Maps they point to;    #
+#     the game relies upon the World to control the Map transitions.  So      #
+#     when the player tries to "exit to the EAST", the Map informs the World  #
+#     what the player is trying to do.  The World will determine whether a    #
+#     Map is located to the EAST of the current one; if found, it will        #
+#     transition from the current Map to the new one.                         #
+#                                                                             #
+#     If there is no map in that direction (or somehow determined that it is  #
+#     an illegal move, which could be script- or flag-determined), no         #
+#     transition occurs, and no new Map is loaded.  This way, the player is   #
+#     blocked from progressing until AFTER the Boss is dead, or a special     #
+#     KeyCard is found (or simply if the file could not be loaded).           #
+#                                                                             #
+#     One reason Maps are not aware of each other is so if we change the      #
+#     layout of the World, we only have to change a single config file.       #
+#     This approach also gives us a nice feature: we can "wrap" the entire    #
+#     World by tying, for example, MAP9's EAST to MAP7's WEST.  This can      #
+#     also make an "endless hallway" in a labyrinth by wrapping one edge of   #
+#     a Map to itself (MAP7's "EAST" points to MAP7), so if you try to walk   #
+#     EAST, you'll find yourself back in the same hallway.  However, if you   #
+#     walk WEST, MAP7's "WEST" may be linked to a different Map, allowing     #
+#     escape.                                                                 #
+#                                                                             #
+#                                                                             #
+###############################################################################
+#                                                                             #
+#                                                                             #
+#  3) A Map is considered to be a single area where the player can walk       #
+#     around.  Maps can be almost any size, ranging from fitting within a     #
+#     single window (like in games where you walk up a castle's tower and     #
+#     all you see is the "the tower" centered in the middle of the screen)    #
+#     to spanning several windows (in vertical and horizontal directions).    #
+#     For larger-than-window Maps, the screen will scroll slightly as you     #
+#     approach the edge of the window to always allow the player to be        #
+#     "somewhat" centered on the screen.                                      #
+#                                                                             #
+#     A Map contains multiple Levels, or "floors".  Each Map may contain a    #
+#     different number of these Levels, each being stacked above the other.   #
+#     One Level may be a "ground floor" while the one above it may be a       #
+#     "castle wall" height, allowing the player to throw items from the wall  #
+#     down onto the heads of the guards below.  Entities (players, NPCs,      #
+#     enemies) can only interact with Entities and objects found on the       #
+#     current Level (with exception of "throwing" things from above-Levels),  #
+#     not on differing Levels.                                                #
+#                                                                             #
+#     Maps will also control parallax for the different Levels.  Many         #
+#     "simple" Maps may not use parallax at all, but the option is available  #
+#     so designers can choose to use it as needed.                            #
+#                                                                             #
+#     Inside of the Map's unique "./media/world#/map#.cfg" config file, the   #
+#     list of all the Levels that have been created for the Map will be       #
+#     listed, in the same fashion as the "./media/world#.cfg" file above:     #
+#                                                                             #
+#       levels_config                                                         #
+#       LEVEL_ID_0                                                            #
+#       level0.cfg                                                            #
+#       level0_triggers.cfg                                                   #
+#       0 0                                                                   #
+#                                                                             #
+#       levels_config                                                         #
+#       LEVEL_ID_1                                                            #
+#       level1.cfg                                                            #
+#       level1_triggers.cfg                                                   #
+#       0 0                                                                   #
+#                                                                             #
+#       levels_config                                                         #
+#       LEVEL_ID_2                                                            #
+#       level2.cfg                                                            #
+#       level2_triggers.cfg                                                   #
+#       0 0                                                                   #
+#                                                                             #
+#     After the "levels_config" line identifier, it lists a single Level's    #
+#     unique ID, the path to the Level's individualized config file, the      #
+#     path to the triggers found within that Level, then the parallax scale   #
+#     (horizontal and vertical).                                              #
+#                                                                             #
+#     If the designers want some sort of "overhang" like treetops, roofs,     #
+#     tall walls, etc., they will need to create these effects on a separate  #
+#     Level.                                                                  #
+#                                                                             #
+#                                                                             #
+###############################################################################
+#                                                                             #
+#                                                                             #
+#  4) A Level is a single "path" where Entities can walk.                     #
+#                                                                             #
+#     Each Level will contain individual Obstacle maps.  It makes sense that  #
+#     Level 0 will allow an Entity to walk UNDER a bridge (not blocked by     #
+#     the "sides" of the bridge), but when walking OVER the bridge (on Level  #
+#     1), the Entity will be blocked from falling off one side or another.    #
+#     If Level 0 (a ground floor) is covered by monsters and you are          #
+#     walking along the bridge on Level 1, you wouldn't want to "fall off"    #
+#     the side of the bridge (which would make you fall down from Level 1 to  #
+#     Level 0)... unless, of course, the current Map was purposely designed   #
+#     to allow for it.                                                        #
+#                                                                             #
+#     Each Level also contains a set of markers which can be used by the      #
+#     designers for various things: items to pick up, switches to activate    #
+#     when stepped on, etc.                                                   #
+#                                                                             #
+#     A Level can be drawn with several Layers.  Each Layer is simply drawn   #
+#     over the top of the others, so you can have a floor tile, upon which    #
+#     the corner of a carpet is partially drawn, upon which a chair's shadow  #
+#     is drawn, above which the actual chair is drawn.  Entities are drawn    #
+#     above all Layers on a single Level, so a new Level has to be created    #
+#     to give the effect of overhangs, like bookshelves or treetops, and      #
+#     placed over the top of the current one.                                 #
+#                                                                             #
+#     Inside of the Level's unique "./media/world#/map#/level#.cfg" config    #
+#     file, the Obstacle map and all of the Layers that have been created     #
+#     for the Level will be listed.  Since a Level has only a single          #
+#     Obstacle map, that map can be included directly within the config       #
+#     file.  Since there is no smaller structure than an individual Layer,    #
+#     all the tiles for the Layer can be included in the config file also.    #
+#                                                                             #
+#     This is slightly different from the styles of the config files above:   #
+#                                                                             #
+#       obstacles_config                                                      #
+#       [col x row entries]                                                   #
+#                                                                             #
+#       layers_config                                                         #
+#       LAYER_ID_0                                                            #
+#       [col x row entries]                                                   #
+#                                                                             #
+#       layers_config                                                         #
+#       LAYER_ID_1                                                            #
+#       [col x row entries]                                                   #
+#                                                                             #
+#       layers_config                                                         #
+#       LAYER_ID_2                                                            #
+#       [col x row entries]                                                   #
+#                                                                             #
+#       ...                                                                   #
+#                                                                             #
+#     After the "obstacles_config" line identifier, all (row x col) values    #
+#     are listed.  After the "layers_config" line identifier, it lists the    #
+#     single Layer's unique ID, followed by its (row x col) values.           #
+#                                                                             #
+#     As an example:                                                          #
+#                                                                             #
+#       obstacles_config                                                      #
+#       15 15 15 15 15 15 15 15 15 15  0  0 15 15 15 15 15 15 15 15 15        #
+#       15  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 15        #
+#       15  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 15        #
+#       15  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 15        #
+#       15  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 15        #
+#       15  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0 15        #
+#        0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0        #
+#        0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0        #
+#       15  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 15        #
+#       15  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0 15        #
+#       15  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 15        #
+#       15  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0 15        #
+#       15  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 15        #
+#       15 15 15 15 15 15 15 15 15 15  0  0 15 15 15 15 15 15 15 15 15        #
+#                                                                             #
+#       layers_config                                                         #
+#       LAYER_ID_0                                                            #
+#        0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0        #
+#        0 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36  0        #
+#        0 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36  0        #
+#        0 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36  0        #
+#        0 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36  0        #
+#        0 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36  0        #
+#        0 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36  0        #
+#        0 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36  0        #
+#        0 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36  0        #
+#        0 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36  0        #
+#        0 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36  0        #
+#        0 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36  0        #
+#        0 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36  0        #
+#        0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0        #
+#                                                                             #
+#       layers_config                                                         #
+#       LAYER_ID_1                                                            #
+#        ...                                                                  #
+#                                                                             #
+#     As can be seen, the Obstacle map shows "openings" in the current Layer  #
+#     heading NORTH, EAST, SOUTH, and WEST.  There are also some pillars in   #
+#     the room that partially obstruct movement.  Then Layer 0 (the base      #
+#     layer) has some "floor tiles" drawn, and above that, Layer 1 and Layer  #
+#     2 would have drawn other tiles.                                         #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+
+##############################################################################
+#                                                                            #
+#  Late-night idea for triggers and/or obstacles:                            #
+#                                                                            #
+#  If the Level is responsible for triggers, you can have some event get     #
+#  fired off when you're on Level0 and step onto (or off of) a switch that   #
+#  would not have been fired off if you had walked over it on Level1.        #
+#                                                                            #
+#  So what we could do is have ALL obstacles be triggers: anything within    #
+#  the range of 0000_0000..0000_1111 would be "obstacles" that fired off a   #
+#  kind of "invalid move" event that the system deals with.                  #
+#  Anything within the range of 0001_0000..0001_1111 could be things that    #
+#  "trigger" when stepped ONTO from the specified direction(s).  Within the  #
+#  range of 0010_0000..0010_1111, it could "trigger" when you walk OFF of    #
+#  the tile.                                                                 #
+#                                                                            #
+#  It would be possible to also have 0100_0000..0100_1111 be things that     #
+#  trigger if you're standing next to them and press the ACTION key.         #
+#                                                                            #
+#  The only difference between an obstacle and a trigger, then, would be     #
+#  the fact that obstacles don't really need to be "tied to" a specific      #
+#  trigger ID (although it wouldn't be hard to do, defaulting them to        #
+#  "invalid move" whenever movement is attempted, and allowing all other     #
+#  ranges to be user-determined.                                             #
+#                                                                            #
+##############################################################################
+

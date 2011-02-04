@@ -1,0 +1,14 @@
+set(MONDAY_SRC_FILES
+    src/Animation.cpp
+    src/Animator.cpp
+    src/Dialog.cpp
+    src/Entity.cpp
+    src/Entity_manager.cpp
+    src/Game.cpp
+    src/Lua_wrapper.cpp
+    src/main.cpp
+    src/Main_menu.cpp
+    src/Menu.cpp
+    src/Player.cpp
+    src/Vector.cpp
+    )

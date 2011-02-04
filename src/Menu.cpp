@@ -1,26 +1,24 @@
 #include "Menu.h"
-
-#include "Debug.h"
 #include "Game.h"
 #include "Gui.h"
 
 
-Menu::Menu(Game* game)
-:game(game)
-,parent(NULL)
-,child(NULL)
+Menu::Menu(Game *game)
+	: game(game),
+	  parent(NULL),
+	  child(NULL)
 {
+	// Default constructor
 }
 
 
 Menu::~Menu()
 {
-	if(child)
-		delete child;
+	Close_child();
 }
 
 
-void Menu::Open_child(Menu* menu)
+void Menu::Open_child(Menu *menu)
 {
 	child = menu;
 }
@@ -28,7 +26,7 @@ void Menu::Open_child(Menu* menu)
 
 void Menu::Base_event(ALLEGRO_EVENT event)
 {
-	if(child)
+	if (child)
 	{
 		child->Base_event(event);
 	}
@@ -38,11 +36,15 @@ void Menu::Base_event(ALLEGRO_EVENT event)
 		{
 			if (event.keyboard.keycode == ALLEGRO_KEY_ESCAPE)
 			{
-				if(parent)
+				if (parent)
+				{
 					parent->Close_child();
+				}
 				else
-					game->Quit_game(); // AFAICT this is only done if you press esc
-				return;                    // from the main menu, so you should quit.
+				{
+					game->Close_menu();
+				}
+				return;
 			}
 		}
 		game->Queue_game_event(Event(event));
@@ -63,40 +65,48 @@ void Menu::Render()
 
 void Menu::Close_child()
 {
-	delete child;
-	child = NULL;
+	if (child != NULL)
+	{
+		delete child;
+		child = NULL;
+	}
 }
 
 
 void Menu::Add_button(Vector position)
 {
 	Button button(this);
-
 }
 
 
 /* LUA callbacks */
-int Menu_add_button(lua_State* state)
+int Menu_add_button(lua_State *state)
 {
 //	assert(lua_gettop(state) == 2);
 
-	Menu* menu = static_cast<Menu*>(lua_touserdata(state, 1));
+	Menu *menu = static_cast<Menu *>(lua_touserdata(state, 1));
 
 	int x = lua_tonumber(state, 2);
 	int y = lua_tonumber(state, 3);
 
-	menu->Add_button(Vector(x, y));
+	if (menu != NULL)
+	{
+		menu->Add_button(Vector(x, y));
+	}
+	else
+	{
+		std::cerr << "Menu_add_button(): static_cast<Menu *>(lua_touserdata(state, 1)) returned NULL.\n";
+	}
 
-	Monday_out(VERBOSE_LEVEL2, std::cout, "[LUA] Menu_add_button\n");
+	printf("[LUA] Menu_add_button\n");
 
 	return 0;
 }
 
 
-void Menu_register_lua_callbacks(lua_State* state)
+void Menu_register_lua_callbacks(lua_State *state)
 {
 	lua_register(state, "Menu_add_button", Menu_add_button);
 //	lua_register(state, "Menu_background_pic", Menu_background_pic);
 }
-
 

@@ -1,27 +1,13 @@
 #include "Keyboard_menu.h"
 
+#include "main.h"
 #include "Game.h"
-#include "Main.h"
 
 
-/* The onboard keyboard contains rectangles for all of the individual keys of
- * a 104-key keyboard layed out.  This draws the rectangles for each keyboard
- * button so when you click on the key, the correct one will highlight.
- */
 KEYBOARD_POS keyb_pos_104[] =
 {
-	/* Format:
-	 *   x (left) coordinate
-	 *   y (top) coordinate
-	 *   w (width) of key in 1/4 increments
-	 *   h (height) of key in 1/4 increments
-	 *
-	 * To have a button of "width 1", specify a 4 (as 4 * 1/4 = 1).  This is
-	 * done so we can have smaller (like those in the top-right corner) or
-	 * larger (like the ENTER or BACKSPACE keys) squares.
-	 */
 
-	{ -1, -1,92,27}, // Outline of the keyboard
+	{ -1, -1,92,27},
 
 	{ 7,13,4,4},  //A
 	{25,17,4,4},  //B
@@ -50,9 +36,8 @@ KEYBOARD_POS keyb_pos_104[] =
 	{26, 9,4,4},  //Y
 	{ 9,17,4,4},  //Z
 
-
-	{40, 5,4,4},  //KEY_0
-	{ 4, 5,4,4},
+	{40, 5,4,4},  //0
+	{ 4, 5,4,4},  //KEY_1
 	{ 8, 5,4,4},
 	{12, 5,4,4},
 	{16, 5,4,4},
@@ -60,11 +45,11 @@ KEYBOARD_POS keyb_pos_104[] =
 	{24, 5,4,4},
 	{28, 5,4,4},
 	{32, 5,4,4},
-	{36, 5,4,4},  //KEY_9
+	{36, 5,4,4},  //9
 
 
 	{74,21,8,4},  //KEY_0_PAD
-	{74,17,4,4},
+	{74,17,4,4},  //KEY_1
 	{78,17,4,4},
 	{82,17,4,4},
 	{74,13,4,4},
@@ -169,8 +154,10 @@ KEYBOARD_POS keyb_pos_104[] =
 };
 
 
+
 void keyrenderGL()
-{};
+{
+}
 
 
 ALLEGRO_FONT *large_font, *small_font;
@@ -180,40 +167,26 @@ int choose_mode = 0;  /* 0 = table,  1 = sequence (choose all in turn) */
 
 void draw_keycap_text(float x, float y, int c)
 {
-    ALLEGRO_COLOR white = al_map_rgba_f(1.0, 1.0, 1.0, 1);
+	ALLEGRO_COLOR white = al_map_rgba_f(1.0, 1.0, 1.0, 1);
 
-	al_set_blender(ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA, white );
+	al_set_blender(ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA, white);
 
 	if (c >= ALLEGRO_KEY_0 && c <= ALLEGRO_KEY_9)
 	{
-		al_font_textout(small_font, x + 2, y + 16, al_keycode_to_name(c), -1 );
+		al_font_textout(small_font, x + 2, y + 16, al_keycode_to_name(c), -1);
 	}
 	if (c >= ALLEGRO_KEY_A && c <= ALLEGRO_KEY_Z)
 	{
-		al_font_textout(large_font, x + 2, y, al_keycode_to_name(c), -1 );
+		al_font_textout(large_font, x + 2, y, al_keycode_to_name(c), -1);
 	}
 }
 
 
-/**
- * Function: Draw the on-screen keyboard, each key, and the keys' text values.
- *
- * This draws the keyboard and all non-active keys as pale green, creates each
- * key (key dimensions are specified within the "keypos" array), and puts the
- * value of the key (like "Q" or "3") within it.
- *
- * Parameters:
- *   keypos:  Array containing each key's x, y, w, and h parameters
- *   x_pos:   Left corner of keyboard
- *   y_pos:   Top corner of keyboard
- *   x_scale: Scales drawing horizontally to fit current monitor
- *   y_scale: Scales drawing vertically to fit current monitor
- */
 void
-draw_virtual_keyboard(KEYBOARD_POS* keypos, float x_pos, float y_pos, float x_scale, float y_scale)
+draw_virtual_keyboard(KEYBOARD_POS *keypos, float x_pos, float y_pos, float x_scale, float y_scale)
 {
-    ALLEGRO_COLOR green = al_map_rgba_f(0, 0.75, 0, 1);
-    ALLEGRO_COLOR bright = al_map_rgba_f(0.50, 1.0, 0.50, 1);
+	ALLEGRO_COLOR green = al_map_rgba_f(0, 0.75, 0, 1);
+	ALLEGRO_COLOR bright = al_map_rgba_f(0.50, 1.0, 0.50, 1);
 	ALLEGRO_COLOR white = al_map_rgba_f(1, 1, 1, 1);
 
 	ALLEGRO_KEYBOARD_STATE state;
@@ -221,77 +194,45 @@ draw_virtual_keyboard(KEYBOARD_POS* keypos, float x_pos, float y_pos, float x_sc
 
 	int n = 0;
 	float x, y, w, h;
-
-	/* We get to the end of the keypos array when the width is set to 0. */
 	while ((keypos->w != 0) && n < 128)
 	{
-		x=keypos->x * x_scale + x_pos;
-		y=keypos->y * y_scale + y_pos;
-		w=keypos->w * x_scale;
-		h=keypos->h * y_scale;
+		x = keypos->x * x_scale + x_pos;
+		y = keypos->y * y_scale + y_pos;
+		w = keypos->w * x_scale;
+		h = keypos->h * y_scale;
 
-	//	if (n==1) printf("x %f,%f,%f,%f ", x, y, w, h);
+	//	if (n == 1) printf("x %f,%f,%f,%f ", x,y,w,h);
 
-		/* Fill in "active" keys */
-		al_set_blender(ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA, (al_key_down(&state, n)) ? white : bright );
-		al_draw_rectangle( x, y, x+w-2, y+h-2, al_map_rgb(200, 200, 200), 1);
-
-		/* Darker key border */
-		al_set_blender(ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA, green );
-		al_draw_rectangle( x+1, y+1, x+w-1, y+h-1, al_map_rgb(200, 200, 200), 0);
-
-		/* Lighter key border (gives a nice 3D look */
-		al_set_blender(ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA, white );
-		al_draw_rectangle( x, y, x+w-2, y+h-2, al_map_rgb(200, 200, 200), 0);
-
-		draw_keycap_text(x+2, y, n);
-		++keypos;
-		++n;
+		al_set_blender(ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA, (al_key_down(&state,n)) ? white : bright);
+		al_draw_rectangle( x, y, x + w - 2, y + h - 2, al_map_rgb(200, 200, 200), 1);
+		al_set_blender(ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA, green);
+		al_draw_rectangle( x + 1, y + 1, x + w - 1, y + h - 1, al_map_rgb(200, 200, 200), 0);
+		al_set_blender(ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA, white);
+		al_draw_rectangle( x, y, x + w - 2, y + h - 2, al_map_rgb(200, 200, 200), 0);
+		draw_keycap_text(x + 2, y, n);
+		keypos++; n++;
 	}
 
 	//printf("\n");
 }
 
 
-/**
- * Function: draw_keyselect_table
- *
- * Above the on-screen keyboard, list the Actions and the primary and secondary
- * keys associated with each.
- *
- * Parameters:
- *   defs:     Definitions of key/joystick mappings (defined in Game.cpp)
- *   n:        Number of Actions defined:
- *               MOVE LEFT, MOVE RIGHT, MOVE UP, MOVE DOWN, FIRE
- *   scroll_n: Top element visible in a scrollable region to be displayed.
- *             Currently, no scrollable region exists, though if more Actions
- *             were defined, this would indicate the "top" of the list of these
- *             Actions visible to change/modify.
- *   font:     Font with which to draw the glyphs to screen.
- *   x_pos     Center horizontal point around which all drawing is based.
- *   y_pos:    Y coordinate from whence to start drawing (and move downward).
- */
 void
-draw_keyselect_table(GAME_CONTROL_DEFS* defs, int n, int scroll_n,
-					 ALLEGRO_FONT* font, int x_pos, int y_pos)
+draw_keyselect_table(GAME_CONTROL_DEFS *defs, int n, int scroll_n,
+					 ALLEGRO_FONT *font, int x_pos, int y_pos)
 {
-    int a;
-    int c1, c2, c3;
-    ALLEGRO_COLOR bright = al_map_rgba_f(0.50, 1.0, 0.50, 1);
+	int a;
+	int c1,c2,c3;
+	ALLEGRO_COLOR bright = al_map_rgba_f(0.50, 1.0, 0.50, 1);
 	ALLEGRO_COLOR white = al_map_rgba_f(1, 1, 1, 1);
 
-	/* Positions for the following columns:
-	 *  Action
-	 *  Key1
-	 *  Key2
-	 */
-	c1 = x_pos - 100;
-	c2 = x_pos + 20;
-	c3 = x_pos + 100;
 
-	int y = y_pos;
+	c1 = x_pos -100;
+	c2 = x_pos +20;
+	c3 = x_pos +100;
 
-	/* Display the column headings */
+	int y= y_pos;
+
 	al_set_blender(ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA, bright);
 	al_font_textout_centre(font, c1, y, "Action", -1);
 	al_font_textout_centre(font, c2, y, "Key1", -1);
@@ -299,26 +240,20 @@ draw_keyselect_table(GAME_CONTROL_DEFS* defs, int n, int scroll_n,
 
 	y += 24;
 
-	/* Display the Action, then the key bindings for primary and secondary
-	 * inputs.
-	 */
-	for (a = scroll_n; a < (n - scroll_n); ++a)
+	for (a = scroll_n;  a < (n - scroll_n) ; a++, y += 20)
 	{
 		al_set_blender(ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA, (a == 0) ? bright : white);
 		al_font_textout_centre(font, c1, y, defs[a].name, -1);
 		al_font_textout_centre(font, c2, y, al_keycode_to_name(defs[a].key1), -1);
 		al_font_textout_centre(font, c3, y, al_keycode_to_name(defs[a].key2), -1);
-
-		y += 20;
 	}
-
 }
 
 
 
-Keyboard_menu::Keyboard_menu(Game* game)
-:Menu(game)
-,option(0)
+Keyboard_menu::Keyboard_menu(Game *game)
+	: Menu(game),
+	  option(0)
 {
 	keyboard_defs.pos = keyb_pos_104;
 	keyboard_defs.numkeys = 104;
@@ -328,53 +263,39 @@ Keyboard_menu::Keyboard_menu(Game* game)
 
 	large_font = al_ttf_load_font("media/DejaVuSans.ttf", 14, 0);
 	small_font = al_ttf_load_font("media/DejaVuSans.ttf", 10, 0);
-
-	/**
-	 * Set up the list of all available options that will be displayed onto the
-	 * keyboard mapping screen.
-	 *
-	 * Make sure you update Keyboard_menu::Event() to match the number of
-	 * options here, else the undefined ones will have a default event of
-	 * GAME_EVENT_NONE.
-	 */
-	keyboardStrings.push_back("Choose all");
-	keyboardStrings.push_back("Load");
-	keyboardStrings.push_back("Save");
-	keyboardStrings.push_back("Exit");
 }
 
 
 void Keyboard_menu::Render()
 {
-    ALLEGRO_COLOR green = al_map_rgba_f(0, 0.75, 0, 1);
-    ALLEGRO_COLOR bright = al_map_rgba_f(0.50, 1.0, 0.50, 1);
+	ALLEGRO_COLOR green = al_map_rgba_f(0, 0.75, 0, 1);
+	ALLEGRO_COLOR bright = al_map_rgba_f(0.50, 1.0, 0.50, 1);
 	ALLEGRO_FONT* font = game->Get_font();
 
 	draw_virtual_keyboard(keyboard_defs.pos, 32, 200,
-		                  600.0 / keyboard_defs.w, 160.0 / keyboard_defs.h );
+		                  600.0 / keyboard_defs.w, 160.0 / keyboard_defs.h);
 
 	draw_keyselect_table(game_control_defs, 5, 0, font, 320, 0);
 
-	int fh = 20;
-	int cx, y;
 
-	/* Horizontally, slightly right of center */
+	int fh = 20;
+	int cx, n = 4, y;
+
+	y = al_get_display_height() - fh * n;
 	cx = al_get_display_width() * 3 / 4;
 
-	/* Vertically, near the bottom of the screen */
-	y = al_get_display_height() - fh * keyboardStrings.size();
-
-	if(font)
+	if (font)
 	{
-		int sizeKeyboard = keyboardStrings.size();
-		for (int selectionIndex = 0; selectionIndex < sizeKeyboard; ++selectionIndex)
-		{
-			al_set_blender(ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA, (option == selectionIndex) ? bright : green );
-			al_font_textout_centre(font, cx, y + fh * selectionIndex,
-								   keyboardStrings[selectionIndex].c_str(), -1);
-		}
+		al_set_blender(ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA, (option == 0) ? bright : green);
+		al_font_textout_centre(font, cx, y, "Choose all", -1);
+		al_set_blender(ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA, (option == 1) ? bright : green);
+		al_font_textout_centre(font, cx, y + fh, "Load", -1);
+		al_set_blender(ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA, (option == 2) ? bright : green);
+		al_font_textout_centre(font,  cx, y + fh * 2, "Save", -1);
+		al_set_blender(ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA, (option == 3) ? bright : green);
+		al_font_textout_centre(font, cx, y + fh * 3, "Exit", -1);
 
-		al_set_blender(ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA, bright );
+		al_set_blender(ALLEGRO_ALPHA, ALLEGRO_INVERSE_ALPHA, bright);
 		al_font_textout_centre(font, cx - 120, y + fh * option, "▶⚔", -1);
 		al_font_textout_centre(font, cx + 120, y + fh * option, "⚔◀", -1);
 /*		al_font_textout(font, "Some unicode symbols:", 50, 240);
@@ -386,57 +307,50 @@ void Keyboard_menu::Render()
 }
 
 
-
 game_event_n Keyboard_menu::Event(ALLEGRO_EVENT event)
 {
 	game_event_n ret = GAME_EVENT_NONE;
 
-	if (ALLEGRO_EVENT_KEY_DOWN == event.type)
+	if (event.type == ALLEGRO_EVENT_KEY_DOWN)
 	{
 		switch (event.keyboard.keycode)
 		{
-		case ALLEGRO_KEY_UP:
-			--option;
-			if (option < 0)
-			{
-				option = keyboardStrings.size() - 1;
-			}
-			break;
-			
-		case ALLEGRO_KEY_DOWN:
-			++option;
-			if (option >= (int)keyboardStrings.size())
-			{
-				option = 0;
-			}
-			break;
-		case ALLEGRO_KEY_ENTER:
-		case ALLEGRO_KEY_SPACE:
-			switch (option)
-			{
-			case 0:
-				choose_mode = 1;
+			case ALLEGRO_KEY_UP:
+				--option;
+				if (option < 0)
+				{
+					option = 3;
+				}
 				break;
-				
-			case 1:
-				ret = GAME_EVENT_OPTIONS_MENU;
+
+			case ALLEGRO_KEY_DOWN:
+				++option;
+				if (option > 3)
+				{
+					option = 0;
+				}
 				break;
-				
-			case 2:
-				ret = GAME_EVENT_OPTIONS_MENU;
+
+			case ALLEGRO_KEY_SPACE:
+				switch (option)
+				{
+					case 0:
+						choose_mode = 1;
+						break;
+					case 1:
+						ret = GAME_EVENT_OPTIONS_MENU;
+						break;
+					case 2:
+						ret = GAME_EVENT_OPTIONS_MENU;
+						break;
+					case 3:
+						ret = GAME_EVENT_OPTIONS_MENU;
+						break;
+				}
 				break;
-				
-			case 3:
-				ret = GAME_EVENT_OPTIONS_MENU;
-				break;
-				
-			default:
-				break;
-			}
-			break;
 		}
 	}
-	
+
 	return ret;
 }
 

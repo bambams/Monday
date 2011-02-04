@@ -36,7 +36,7 @@
 CC = gcc
 CXX = g++
 LD = g++
-CFLAGS = -Iinclude -I/usr/include/lua5.1 -s -W -Wall -Wno-unused -g
+CFLAGS = -W -Wall -Wno-unused -Iinclude
 
 # Add-on libraries go here
 ifdef STATICLINK
@@ -67,7 +67,7 @@ ifdef MINGDIR
 endif
 endif
 
-LIBS += -la5_iio-4.9.8 -la5_font-4.9.8 -la5_ttf-4.9.8 -llua
+LIBS += -la5_iio -la5_font -la5_ttf -llua
 
 
 ifdef WINDOWS
@@ -77,9 +77,9 @@ ifdef WINDOWS
 	ifdef STATICLINK
 
 		ifdef DEBUG
-			LIBS += -lallegd_s-4.9.8
+			LIBS += -lallegd_s-4.9.6.dll
 		else
-			LIBS += -lalleg_s-4.9.8
+			LIBS += -lalleg_s-4.9.6.dll
 		endif
 
 		CFLAGS += -DSTATICLINK
@@ -89,11 +89,11 @@ ifdef WINDOWS
 	else
 		ifdef DEBUG
 			CFLAGS += -DDEBUG
-			LIBS += -lallegd-4.9.8
+			LIBS += -lallegd-4.9.6.dll
 			OBJDIR = obj/debug
 			BIN = $(NAME)_debug.exe
 		else
-			LIBS += -lalleg-4.9.8
+			LIBS += -lalleg-4.9.6.dll
 			OBJDIR = obj/release
 			BIN = $(NAME).exe
 		endif
@@ -101,7 +101,7 @@ ifdef WINDOWS
 else
 	RM = rm -f
 	ifdef STATICLINK
-		LIBS += `allegro5-config --libs --static` -lXrender
+		LIBS += `allegro-config --libs --static` -lXrender
 		OBJDIR = obj/static
 		BIN = $(NAME)_static
 	else
@@ -114,7 +114,7 @@ endif
 OBJ_CPP := $(addprefix $(OBJDIR)/, $(subst src/,,$(patsubst %.cpp,%.o,$(wildcard src/*.cpp))))
 OBJ_C := $(addprefix $(OBJDIR)/, $(subst src/,,$(patsubst %.c,%.o,$(wildcard src/*.c))))
 
-all: $(BIN)
+all: game
 
 $(OBJDIR)/%.o: src/%.c
 	$(CC) $(CFLAGS) -o $@ -c $<
@@ -122,7 +122,7 @@ $(OBJDIR)/%.o: src/%.c
 $(OBJDIR)/%.o: src/%.cpp
 	$(CXX) $(CFLAGS) -o $@ -c $<
 
-$(BIN): $(OBJ_C) $(OBJ_CPP)
+game: $(OBJ_C) $(OBJ_CPP)
 	$(LD) -o $(BIN) $(OBJ_C) $(OBJ_CPP) $(LIBS) $(LFLAGS)
 
 clean:

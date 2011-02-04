@@ -1,6 +1,5 @@
 import glob
 import sys
-import os
 
 files = glob.glob('src/*.cpp')
 files = [x.replace("src", "obj") for x in files]
@@ -36,11 +35,5 @@ if int(debug):
 env.Append(CCFLAGS = '-Wall')
 
 env.BuildDir('obj','src', duplicate = 0)
-env.Append(LIBS=['allegro-4.9.8','a5_iio-4.9.8','a5_font-4.9.8','a5_ttf-4.9.8'])
+env.Append(LIBS=['alleg-4.9.5','a5_iio','a5_font','a5_ttf'])
 env.Program('monday',files)
-
-rebuild_docs = ARGUMENTS.get('rebuild_docs', 0)
-if int(rebuild_docs):
-	os.system("../NaturalDocs/NaturalDocs -i include -i src -i docsrc -o HTML docs -p nd -ro")
-else:
-	os.system("../NaturalDocs/NaturalDocs -i include -i src -i docsrc -o HTML docs -p nd")

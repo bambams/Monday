@@ -5,16 +5,21 @@
 
 
 Camera::Camera()
-:rumble(0)
+	: position(0, 0),
+	  viewport_size(0, 0),
+	  viewport_topleft(0, 0),
+	  apply(0, 0),
+	  effect_sum(0, 0)
 {
+	/* Camera does not rumble by default */
+	rumble = 0;
 }
 
 
 void Camera::Set_position(Vector p)
 {
-//	rumble = 0;
 	position = p;
-	apply = viewport_size/2 - position + effect_sum;
+	apply = viewport_size / 2 - position + effect_sum;
 }
 
 
@@ -24,9 +29,9 @@ Vector Camera::Get_position()
 }
 
 
-Vector Camera::Apply(const Vector& v) const
+Vector Camera::Apply(const Vector &v) const
 {
-	return v+apply;
+	return v + apply;
 }
 
 
@@ -40,15 +45,19 @@ void Camera::Set_viewport(Vector topleft, Vector size)
 void Camera::Update(float dt)
 {
 	effect_sum.Set(0, 0);
-	float precalc = (float)rumble / (float)RAND_MAX;
-	effect_sum += Vector(rand() * precalc, rand() * precalc);
-	apply = viewport_size/2 - position + effect_sum;
+	effect_sum += Vector(rand() / float(RAND_MAX) * rumble, rand() / float(RAND_MAX) * rumble);
+	apply = viewport_size / 2 - position + effect_sum;
 }
 
 
-void Camera::Set_rumble(float amount) // Do we ever use floats for this, or would ints work?
+void Camera::Set_rumble(float amount)
 {
 	rumble = amount;
-	Monday_out(0, std::cout, "Rumble: %.f\n", rumble); // should use Monday_out to keep code consistent
+	std::cout << "Rumble: " << rumble << std::endl;
 }
 
+
+float Camera::Get_rumble()
+{
+	return rumble;
+}

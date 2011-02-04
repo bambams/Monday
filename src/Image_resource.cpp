@@ -1,9 +1,9 @@
 #include "Image_resource.h"
 
-
 Image_resource::Image_resource()
-:bitmap(NULL)
+	: bitmap(NULL)
 {
+	// Nothing to do
 }
 
 
@@ -13,21 +13,14 @@ Image_resource::~Image_resource()
 }
 
 
-bool Image_resource::Load(const std::string filename)
+bool Image_resource::Load(const std::string &filename)
 {
 	bitmap = al_iio_load(filename.c_str());
-	if (!bitmap)
-	{
-		return false;
-	}
-	else
-	{
-		return true;
-	}
+	return (bitmap != NULL);
 }
 
 
-ALLEGRO_BITMAP* Image_resource::Get_allegro_bitmap()
+ALLEGRO_BITMAP *Image_resource::Get_allegro_bitmap()
 {
 	return bitmap;
 }

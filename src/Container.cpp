@@ -1,26 +1,19 @@
 #include "Container.h"
-#include "Debug.h"
 #include "Entity.h"
+#include "Debug.h"
 #include "Game.h"
-
 #include <algorithm>
 
-
-Container::Container() :
-	game(NULL)
+Container::Container()
+	: game(NULL)
 {
+	// Nothing to do
 }
 
 
-void Container::Set_game(Game* igame)
+void Container::Set_game(Game *igame)
 {
 	game = igame;
-}
-
-
-Game* Container::Get_game()
-{
-	return game;
 }
 
 
@@ -33,17 +26,23 @@ Container::~Container()
 }
 
 
-void Container::Add_entity(Entity* e)
+void Container::Add_entity(Entity *e)
 {
-	mon_assert(NULL != e);
-	entities.push_back(e);
+	assert(e && "Container::Add_entity: *e is NULL.\n");
+	if (e != NULL)
+	{
+		entities.push_back(e);
+	}
 }
 
 
-void Container::Remove_entity(Entity* e)
+void Container::Remove_entity(Entity *e)
 {
-	mon_assert(NULL != e);
-	removals.push_back(e);
+	assert(e && "Container::Remove_entity: *e is NULL.\n");
+	if (e != NULL)
+	{
+		removals.push_back(e);
+	}
 }
 
 
@@ -53,13 +52,13 @@ int Container::Number_of_entities()
 }
 
 
-Entities& Container::Get_entities()
+Entities &Container::Get_entities()
 {
 	return entities;
 }
 
 
-void Container::Render(const Camera& camera)
+void Container::Render(const Camera *camera)
 {
 	Process_removals();
 	std::sort(entities.begin(), entities.end());
@@ -70,18 +69,7 @@ void Container::Render(const Camera& camera)
 }
 
 
-/**
- * Function: Pick_up
- *
- * Pick up an item (all items are Entities) and add it to your inventory.
- *
- * Parameters:
- *   from: Position of the Entity (Player) picking up the item
- *   r:    Radius around item to determine whether the Entity is close enough
- *   to:   Pointer to Entity (Player) whose inventory receives the item
- *   all:  Endless_supply defines
- */
-void Container::Pick_up(Vector from, float r, Container* to, bool all)
+void Container::Pick_up(Vector from, float r, Container *to, bool all)
 {
 	Process_removals();
 	for (Entities::iterator i = entities.begin(); i != entities.end(); ++i)
@@ -91,13 +79,16 @@ void Container::Pick_up(Vector from, float r, Container* to, bool all)
 		if (length <= r)
 		{
 			if ((*i)->Pick_up(to) && !all)
+			{
 				break;
+			}
 		}
 	}
+	Process_removals();
 }
 
 
-void Container::Interact(Vector from, float r, Container* to)
+void Container::Interact(Vector from, float r, Container *to)
 {
 	Process_removals();
 	for (Entities::iterator i = entities.begin(); i != entities.end(); ++i)
@@ -110,6 +101,7 @@ void Container::Interact(Vector from, float r, Container* to)
 				break;
 		}
 	}
+	Process_removals();
 }
 
 

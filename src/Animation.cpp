@@ -1,17 +1,37 @@
 #include "Animation.h"
 #include "Debug.h"
 
-#include <fstream>
 #include <iostream>
+#include <fstream>
 
 
-void Animation::Add_frame(ALLEGRO_BITMAP* bitmap)
+Animation::Animation()
+	: frame_time(0)
 {
-	mon_assert(NULL != bitmap)
-	frames.push_back(bitmap);
+	// Nothing to do
 }
 
 
+void Animation::Add_frame(ALLEGRO_BITMAP *bitmap)
+{
+	assert(bitmap != NULL && "Animation::Add_frame(): *bitmap == NULL.\n");
+	if (bitmap != NULL)
+	{
+		frames.push_back(bitmap);
+	}
+}
+
+
+Animation::~Animation()
+{
+	for (Frames::iterator i = frames.begin(); i != frames.end(); ++i)
+	{
+		al_destroy_bitmap(*i);
+	}
+}
+
+
+/* KLUDGE: Remove this hard-coded value */
 double Animation::Frame_time()
 {
 	return 0.3;
@@ -26,9 +46,9 @@ int Animation::Number_of_frames()
 
 void Animation::Render_frame(int frame, float x, float y, float scale, bool hflip)
 {
-	if (frame<(int)frames.size())
+	if (frame < (int)frames.size())
 	{
-		mon_assert(frames[frame])
-		al_draw_rotated_scaled_bitmap(frames[frame], al_get_bitmap_width(frames[frame])/2, al_get_bitmap_height(frames[frame])/2, x, y, scale*(hflip?-1:1), scale, 0, 0);
+		assert(frames[frame])
+		al_draw_rotated_scaled_bitmap(frames[frame], al_get_bitmap_width(frames[frame]) / 2, al_get_bitmap_height(frames[frame]) / 2, x, y, scale * (hflip ? -1 : 1), scale, 0, 0);
 	}
 }

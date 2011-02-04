@@ -1,91 +1,50 @@
-#ifndef __VECTOR_H
-#define __VECTOR_H
+#ifndef Vector_h
+#define Vector_h
 
-/* Class: Vector
- * A 2D vector.
- * */
+
 class Vector
 {
-public:
-	/* Constructor: Vector
-	 * */
-	Vector();
-	/* Constructor: Vector
-	 * */
-	Vector(float x, float y);
-	/* Operator: operator=
-	 * */
-	const Vector& operator=(const Vector& v);
-	/* Operator: operator==
-	 * */
-	bool operator==(const Vector& v) const;
-	/* Operator: operator!=
-	 * */
-	bool operator!=(const Vector& v) const;
-	/* Function: Set
-	 * */
-	void Set(float x, float y);
-	/* Function: X
-	 * */
-	float X() const;
-	/* Function: Y
-	 * */
-	float Y() const;
-	/* Function: Zero
-	 * Sets the vector to 0,0
-	 * */
-	void Zero();
-	/* Function: Length
-	 * */
-	float Length() const;
-	/* Function: Length_squared
-	 * */
-	float Length_squared() const;
-	/* Function: Normalize
-	 * Does nothing if Length is 0.
-	 */
-	void Normalize();
-	/* Function: Normalized
-	 * Returns:
-	 * Normalized vector or just itself if Length is 0.
-	 */
-	Vector Normalized() const;
-	/* Function: Dotproduct
-	 * */
-	float Dotproduct(const Vector& v) const;
-	/* Operator: operator+=
-	 * */
-	const Vector& operator+=(const Vector& v);
-	/* Operator: operator-=
-	 * */
-	const Vector& operator-=(const Vector& v);
-	/* Operator: operator*=
-	 * */
-	const Vector& operator*=(float v);
-	/* Operator: operator/=
-	 * */
-	const Vector& operator/=(float v);
-	/* Operator: operator+
-	 * */
-	const Vector operator+(const Vector& v) const;
-	/* Operator: operator-
-	 * */
-	const Vector operator-(const Vector& v) const;
-	/* Operator: operator-
-	 * */
-	const Vector operator-() const;
-	/* Operator: operator/
-	 * */
-	Vector operator/(float s) const;
-	/* Operator: operator*
-	 * */
-	Vector operator*(float s) const;
-	/* Function: Angle
-	 * */
-	float Angle() const;
-private:
-	float x;
-	float y;
+	public:
+		Vector();
+		Vector(float x, float y);
+
+		const Vector &operator = (const Vector &v);
+
+		bool operator == (const Vector &v) const;
+		bool operator != (const Vector &v) const;
+
+		void Set(float x, float y);
+
+		float X() const;
+		float Y() const;
+
+		void Zero();
+		float Length() const;
+		float Length_squared() const;
+
+		/* Normalize does nothing if Length is 0. */
+		void Normalize();
+
+		/* Normalized returns itself if Length is 0. */
+		Vector Normalized() const;
+
+		float Dotproduct(const Vector &v) const;
+		const Vector &operator += (const Vector &v);
+		const Vector &operator -= (const Vector &v);
+		const Vector &operator *= (float v);
+		const Vector &operator /= (float v);
+		const Vector operator + (const Vector &v) const;
+		const Vector operator - (const Vector &v) const;
+		const Vector operator - () const;
+		Vector operator / (float s) const;
+		Vector operator * (float s) const;
+
+		float Angle() const;
+
+	private:
+		float x;
+		float y;
 };
 
-#endif
+
+#endif  //  Vector_h

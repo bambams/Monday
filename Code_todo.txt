@@ -1,0 +1,81 @@
+C = Completed
+A = Assigned
+t = trezker
+m = mokkan
+o = onlinecop
+mm = MattyMatt
+
+
+	Bugs
+C		segfault on shutdown (most likely in entities/containers)
+	
+	Map transition
+
+	Long running scripts //When for instance using an item that triggers a cutscene
+		Register script function in Game
+		Game keeps calling registered lua functions every update until they return the I'm finished return value.
+
+	Inventory
+C		Item management //No, it's pretty different from the Item_manager, so no inheritance please.
+
+	Inventory menu // Yes, this is a menu. Opened with some button in game.
+		Info about item // On mousover
+		Render function // Layout?
+		Equip // just a click; right click to bind to right mouse button, left to bind to left.
+		Use/Drop item // Low prio, this is not in design
+
+	Entity
+		Set_size	//Circle size, for collision
+		Lua bindings
+C			Set_function(action, function)
+C			Set/get position
+C			Pick up
+C			Update
+C			Interact
+C			Set_movement
+			Set_size
+			
+	Entity_manager
+C		Pick_up
+		Attack
+C		Interact
+		Lua bindings
+C			Create_entity
+C			Destroy_entity
+		Entity prototypes (described in XML?)
+
+C	Camera
+
+C	Resource_manager
+C		Image_resource
+
+	Player
+		Equip		//See inventory
+		Item usage	//On mouse clicks, use equipped item mapped to input
+C		Make Entity base class.
+		Jetpack
+			skip checking if you're over a hole or electric floor or something
+			as long as the pack is equipped and firing.
+			draw player a few pixels higher.
+		Grenade
+			3D in drawing only; it arcs. That's a call to calc_spline(). No complexity.
+
+	Loading // Using scripts
+		Entities
+		Map
+C			Layer
+C			Tileset
+C			Collision
+
+	Dialog //This falls under menu, created using lua.
+
+	Tilemap
+o		Collision // Now checks for collision based on direction; in progress
+C		Layer
+		Tileset
+C			Basic
+			Animated tiles
+
+	Collision manager
+C		Has list of obstacles
+C		Checks list for collisions on request from clients

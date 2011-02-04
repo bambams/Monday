@@ -2,26 +2,29 @@
 #include <cmath>
 
 Vector::Vector()
-:x(0)
-,y(0)
+	: x(0),
+	  y(0)
 {
+	// Nothing to do
 }
 
 
 Vector::Vector(float ix, float iy)
-:x(ix)
-,y(iy)
-{}
+	: x(ix),
+	  y(iy)
+{
+	// Nothing to do
+}
 
 
 void Vector::Set(float ix, float iy)
 {
-	x=ix;
-	y=iy;
+	x = ix;
+	y = iy;
 }
 
 
-const Vector& Vector::operator=(const Vector& v)
+const Vector &Vector::operator = (const Vector &v)
 {
 	x = v.x;
 	y = v.y;
@@ -29,15 +32,15 @@ const Vector& Vector::operator=(const Vector& v)
 }
 
 
-bool Vector::operator!=(const Vector& v) const
+bool Vector::operator != (const Vector &v) const
 {
-	return !operator==(v);
+	return !(operator == (v));
 }
 
 
-bool Vector::operator==(const Vector& v) const
+bool Vector::operator == (const Vector &v) const
 {
-	if(x==v.x && y==v.y)
+	if (x == v.x && y == v.y)
 	{
 		return true;
 	}
@@ -59,107 +62,127 @@ float Vector::Y() const
 
 float Vector::Length() const
 {
-	return sqrt(Length_squared());
+	/* It's expensive to push another function onto the stack in order to
+	 * do this simple math; just manually calculate it.
+	 */
+	return sqrt(x * x + y * y);
 }
 
 
 float Vector::Length_squared() const
 {
-	return x*x+y*y;
+	return (x * x + y * y);
 }
 
 
 void Vector::Normalize()
 {
-	float length=Length();
-	if(length!=0)
+	/* The only way "sqrt(x^2 + y^2)" would return 0 is if x == y */
+	if (x - y != 0)
 	{
-		x/=length;
-		y/=length;
+		float length = 1.0f / sqrtf(x * x + y * y);
+		x *= length;
+		y *= length;
 	}
 }
 
 
 Vector Vector::Normalized() const
 {
-	float length=Length();
-	if(length!=0)
+	/* The only way "sqrt(x^2 + y^2)" would return 0 is if x == y */
+	if (x - y != 0)
 	{
-		return Vector(x/length, y/length);
+		float length = 1.0f / sqrtf(x * x + y * y);
+		return Vector(x * length, y * length);
 	}
 	return *this;
 }
 
 
-float Vector::Dotproduct(const Vector& v) const
+float Vector::Dotproduct(const Vector &v) const
 {
 	return x * v.x + y * v.y;
 }
 
 
-const Vector& Vector::operator+=(const Vector& v)
+const Vector &Vector::operator += (const Vector &v)
 {
-	x+=v.x;
-	y+=v.y;
+	x += v.x;
+	y += v.y;
 	return *this;
 }
 
 
-const Vector& Vector::operator-=(const Vector& v)
+const Vector &Vector::operator -= (const Vector &v)
 {
-	x-=v.x;
-	y-=v.y;
+	x -= v.x;
+	y -= v.y;
 	return *this;
 }
 
 
-const Vector& Vector::operator*=(float v)
+const Vector &Vector::operator *= (float v)
 {
-	x*=v;
-	y*=v;
+	x *= v;
+	y *= v;
 	return *this;
 }
 
 
-const Vector& Vector::operator/=(float v)
+const Vector &Vector::operator /= (float v)
 {
-	x/=v;
-	y/=v;
+	if (v != 0)
+	{
+		x /= v;
+		y /= v;
+	}
 	return *this;
 }
 
 
-const Vector Vector::operator-(const Vector& v) const
+const Vector Vector::operator - (const Vector &v) const
 {
-	return Vector(x-v.x, y-v.y);
+	return Vector(x - v.x, y - v.y);
 }
 
 
-const Vector Vector::operator+(const Vector& v) const
+const Vector Vector::operator + (const Vector &v) const
 {
-	return Vector(x+v.x, y+v.y);
+	return Vector(x + v.x, y + v.y);
 }
 
 
 void Vector::Zero()
 {
-	x=0;
-	y=0;
+	x = 0;
+	y = 0;
 }
 
 
-Vector Vector::operator/(float s) const
+Vector Vector::operator / (float s) const
 {
-	Vector temp;
-	temp.Set(x/s, y/s);
+	Vector temp(0, 0);
+
+	/* Prevent divide-by-zero */
+	if (s != 0)
+	{
+		temp.Set(x / s, y / s);
+	}
+
 	return temp;
 }
 
 
-Vector Vector::operator*(float s) const
+Vector Vector::operator * (float s) const
 {
-	Vector temp;
-	temp.Set(x*s, y*s);
+	Vector temp(0, 0);
+
+	/* Prevent divide-by-zero */
+	if (s != 0)
+	{
+		temp.Set(x * s, y * s);
+	}
+
 	return temp;
 }
 
